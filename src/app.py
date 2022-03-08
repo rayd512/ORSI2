@@ -1,6 +1,7 @@
 
 import cv2
 import numpy as np
+from components import *
 
 button = [20, 60, 50, 250]
 
@@ -10,25 +11,6 @@ def process_click(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
         if y > button[0] and y < button[1] and x > button[2] and x < button[3]:
             print('Clicked on Button!')
-
-
-def draw_text(img, text,
-              font=cv2.FONT_HERSHEY_PLAIN,
-              pos=(0, 0),
-              font_scale=3,
-              font_thickness=2,
-              text_color=(0, 255, 0),
-              text_color_bg=(0, 0, 0)
-              ):
-
-    x, y = pos
-    text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
-    text_w, text_h = text_size
-    cv2.rectangle(img, pos, (x + text_w, y + text_h), text_color_bg, -1)
-    cv2.putText(img, text, (x, y + text_h + font_scale - 1),
-                font, font_scale, text_color, font_thickness)
-
-    return text_size
 
 
 def main():
@@ -42,14 +24,8 @@ def main():
         # by frame
         ret, frame = vid.read()
 
-        # create button image
-        # control_image = np.zeros((40, 200, 3), np.uint8)
-
-        # control_image[button[0]:button[1], button[2]:button[3]] = 255
-        draw_text(frame, "Start", font_scale=4, pos=(
-            10, 20))
-
-        # frame[button[0]:button[1], button[2]:button[3]] = control_image
+        # Draw start button
+        Button.end(frame)
 
         # Change to fullscreen
         cv2.namedWindow("scanner", cv2.WND_PROP_FULLSCREEN)
