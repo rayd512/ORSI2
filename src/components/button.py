@@ -1,6 +1,7 @@
 import cv2
 
 # https://stackoverflow.com/questions/60674501/how-to-make-black-background-in-cv2-puttext-with-python-opencv
+# https://stackoverflow.com/questions/55919337/creating-capture-button-on-window
 
 
 class Button:
@@ -12,6 +13,8 @@ class Button:
     start_text = "Start"
     end_text = "End"
     font_size = 2
+    background_size = max(start_text, end_text, key=len)
+    font = cv2.FONT_HERSHEY_PLAIN
 
     @staticmethod
     def start(img, font=cv2.FONT_HERSHEY_PLAIN):

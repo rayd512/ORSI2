@@ -2,30 +2,46 @@
 import cv2
 import numpy as np
 from components import *
+from models import *
 
-button = [20, 60, 50, 250]
 
-
-def process_click(event, x, y, flags, params):
+def on_click(event, x, y, flags, param):
+    """
+    Process clicks on start and end buttons
+    """
+    global hasSession, db
+    (text_w, text_h), _ = cv2.getTextSize(Button.start_text,
+                                          Button.font, Button.font_size, Button.font_thickness)
     # check if the click is within the dimensions of the button
     if event == cv2.EVENT_LBUTTONDOWN:
-        if y > button[0] and y < button[1] and x > button[2] and x < button[3]:
-            print('Clicked on Button!')
+        if x > Button.pos[0] and x < Button.pos[0] + text_w + 10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
+            if not hasSession:
+                db.new_session()
+            hasSession = not hasSession
+
+
+# Keep state of buttons
+hasSession = False
+
+# Global access to db
+db = Database()
 
 
 def main():
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     vid = cv2.VideoCapture(0)
-
     while(True):
 
         # Capture the video frame
         # by frame
         ret, frame = vid.read()
 
-        # Draw start button
-        Button.end(frame)
+        # Draw start / end button
+        if not hasSession:
+            Button.start(frame)
+        else:
+            Button.end(frame)
 
         # Change to fullscreen
         cv2.namedWindow("scanner", cv2.WND_PROP_FULLSCREEN)
@@ -35,7 +51,7 @@ def main():
         # Display the resulting frame
         cv2.imshow("scanner", frame)
 
-        # cv2.setMouseCallback("scanner", process_click)
+        cv2.setMouseCallback("scanner", on_click)
 
         # the 'q' button is set as the
         # quitting button you may use any
