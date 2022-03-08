@@ -10,7 +10,8 @@ def on_click(event, x, y, flags, param):
     Process clicks on start and end buttons
     """
     global hasSession, db
-    (text_w, text_h), _ = cv2.getTextSize(Button.start_text,
+    bounding_box = Button.end_text if hasSession else Button.start_text
+    (text_w, text_h), _ = cv2.getTextSize(bounding_box,
                                           Button.font, Button.font_size, Button.font_thickness)
     # check if the click is within the dimensions of the button
     if event == cv2.EVENT_LBUTTONDOWN:
