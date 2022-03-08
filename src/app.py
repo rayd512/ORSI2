@@ -57,7 +57,7 @@ def main():
         # the 'q' button is set as the
         # quitting button you may use any
         # desired button of your choice
-        if cv2.waitKey(1) & 0xFF == ord('q') or cv2.waitKey(20) & 0xFF == 27:
+        if cv2.waitKey(1) & 0xFF == ord('q') or cv2.waitKey(1) & 0xFF == 27:
             break
 
     # After the loop release the cap object
