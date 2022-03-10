@@ -3,6 +3,9 @@ import cv2
 import numpy as np
 from components import *
 from models import *
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import time
 
 
 def on_click(event, x, y, flags, param):
@@ -31,18 +34,26 @@ db = Database()
 def main():
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
-    vid = cv2.VideoCapture(0)
-    while(True):
+    # initialize the camera and grab a reference to the raw camera capture
+    camera = PiCamera()
+    camera.resolution = (640, 480)
+    camera.framerate = 32
+    rawCapture = PiRGBArray(camera, size=(640, 480))
+
+    # allow the camera to warmup
+    time.sleep(0.1)
+
+    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 
         # Capture the video frame
         # by frame
-        ret, frame = vid.read()
+        image = frame.array
 
         # Draw start / end button
         if not hasSession:
-            Button.start(frame)
+            Button.start(image)
         else:
-            Button.end(frame)
+            Button.end(image)
 
         # Change to fullscreen
         cv2.namedWindow("scanner", cv2.WND_PROP_FULLSCREEN)
@@ -50,7 +61,7 @@ def main():
             "scanner", cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
         # Display the resulting frame
-        cv2.imshow("scanner", frame)
+        cv2.imshow("scanner", image)
 
         cv2.setMouseCallback("scanner", on_click)
 
@@ -60,8 +71,6 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q') or cv2.waitKey(1) & 0xFF == 27:
             break
 
-    # After the loop release the cap object
-    vid.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
 
