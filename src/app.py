@@ -64,6 +64,8 @@ def main():
         cv2.imshow("scanner", image)
 
         cv2.setMouseCallback("scanner", on_click)
+        
+        rawCapture.truncate(0)
 
         # the 'q' button is set as the
         # quitting button you may use any
