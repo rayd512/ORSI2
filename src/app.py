@@ -54,6 +54,7 @@ def main():
             Button.start(image)
         else:
             Button.end(image)
+            Button.scan(image)
 
         # Change to fullscreen
         cv2.namedWindow("scanner", cv2.WND_PROP_FULLSCREEN)
