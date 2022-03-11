@@ -49,7 +49,7 @@ class Database:
             u'wattage': wattage
         }
 
-        if self.current_session == None:
+        if self.current_session is None:
             raise Exception('No Current Session')
 
         self.db.collection(u'sessions').document(

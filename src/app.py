@@ -18,7 +18,8 @@ def on_click(event, x, y, flags, param):
                                           Button.font, Button.font_size, Button.font_thickness)
     # check if the click is within the dimensions of the button
     if event == cv2.EVENT_LBUTTONDOWN:
-        if x > Button.pos[0] and x < Button.pos[0] + text_w + 10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
+        if x > Button.pos[0] and x < Button.pos[0] + text_w + \
+                10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
             if not hasSession:
                 db.new_session()
             hasSession = not hasSession
@@ -43,7 +44,8 @@ def main():
     # Allow the camera to warmup
     time.sleep(0.1)
 
-    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+    for frame in camera.capture_continuous(
+            rawCapture, format="bgr", use_video_port=True):
 
         # Capture the video frame
         # by frame
@@ -65,7 +67,7 @@ def main():
         cv2.imshow("scanner", image)
 
         cv2.setMouseCallback("scanner", on_click)
-        
+
         rawCapture.truncate(0)
 
         # the 'q' button is set as the
