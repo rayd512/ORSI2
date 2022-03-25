@@ -2,6 +2,7 @@ from __future__ import print_function
 import cv2 as cv
 import argparse
 
+detected = False
 
 def detectAndDisplay(frame):
     frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
@@ -44,5 +45,5 @@ while True:
         print('--(!) No captured frame -- Break!')
         break
     detectAndDisplay(frame)
-    if cv.waitKey(100) == 27: # ESC key
+    if cv.waitKey(1) == 27: # ESC key
         break
