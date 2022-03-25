@@ -64,5 +64,7 @@ while True:
     elif counter % 100 == 0:
         detectAndDisplay(frame)
         counter = 0
+        if len(resistors) == 1:
+            exit(0)
     if cv.waitKey(100) == 27: # ESC key
         break
