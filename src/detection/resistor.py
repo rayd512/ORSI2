@@ -3,8 +3,10 @@ import cv2 as cv
 import argparse
 
 detected = False
+resistors = []
 
 def detectAndDisplay(frame):
+    global resistors
     frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     # frame_gray = cv.equalizeHist(frame_gray)
     #-- Detect resistors
@@ -15,6 +17,11 @@ def detectAndDisplay(frame):
         # secondPass = resistor_cascade.detectMultiScale(ROI, 1.01, 25)
         # for (x1,y1,w1,h1) in secondPass:
         #     frame = cv.rectangle(frame, (x+x1,y+y1), (x+x1+w1, y+y1+h1), (0, 255, 0), 2)
+    cv.imshow('Capture - Resistor detection', frame)
+
+def display(frame):
+    for(x,y,w,h) in resistors:
+        frame = cv.rectangle(frame, (x,y), (x+w, y+h), (255, 0, 0), 2)
     cv.imshow('Capture - Resistor detection', frame)
 
 
@@ -36,6 +43,8 @@ camera_device = args.camera
 
 #-- 2. Read the video stream
 cap = cv.VideoCapture(camera_device)
+counter = 100
+
 if not cap.isOpened:
     print('--(!)Error opening video capture')
     exit(0)
@@ -44,6 +53,9 @@ while True:
     if frame is None:
         print('--(!) No captured frame -- Break!')
         break
-    detectAndDisplay(frame)
-    if cv.waitKey(1) == 27: # ESC key
+    if counter < 100:
+        display(frame)
+    elif counter >= 100:
+        detectAndDisplay(frame)
+    if cv.waitKey(100) == 27: # ESC key
         break
