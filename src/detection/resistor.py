@@ -20,6 +20,7 @@ def detectAndDisplay(frame):
     cv.imshow('Capture - Resistor detection', frame)
 
 def display(frame):
+
     for(x,y,w,h) in resistors:
         frame = cv.rectangle(frame, (x,y), (x+w, y+h), (255, 0, 0), 2)
     cv.imshow('Capture - Resistor detection', frame)
@@ -57,7 +58,5 @@ while True:
         display(frame)
     elif counter >= 100:
         detectAndDisplay(frame)
-
-    print(str(len(frame)) + "   " + str(len(frame[0])))
-    if cv.waitKey(1000) == 27: # ESC key
+    if cv.waitKey(100) == 27: # ESC key
         break
