@@ -14,6 +14,7 @@ def detectAndDisplay(frame):
     resistors = resistor_cascade.detectMultiScale(frame_gray, 1.1, 25)
     for (x,y,w,h) in resistors:
         frame = cv.rectangle(frame, (x,y), (x+w, y+h), (255, 0, 0), 2)
+        frame = cv.line(frame, (x, y+(h/2)), (x+w, y+(h/2)), (0, 0, 255), 1)
         print(frame.shape)
         # ROI = frame_gray[y:y+h, x:x+w]
         # secondPass = resistor_cascade.detectMultiScale(ROI, 1.01, 25)
@@ -25,6 +26,7 @@ def display(frame):
 
     for(x,y,w,h) in resistors:
         frame = cv.rectangle(frame, (x,y), (x+w, y+h), (255, 0, 0), 2)
+        frame = cv.line(frame, (x, y+(h/2)), (x+w, y+(h/2)), (0, 0, 255), 1)
     cv.imshow('Capture - Resistor detection', frame)
 
 
