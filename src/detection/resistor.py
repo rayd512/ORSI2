@@ -58,6 +58,6 @@ while True:
     elif counter >= 100:
         detectAndDisplay(frame)
 
-    print(frame)
+    print(str(len(frame)) + "   " + str(len(frame[0])))
     if cv.waitKey(5000) == 27: # ESC key
         break
