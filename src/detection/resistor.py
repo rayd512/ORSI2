@@ -1,5 +1,6 @@
 from __future__ import print_function
 import cv2 as cv
+import numpy as np
 import argparse
 
 detected = False
@@ -13,6 +14,7 @@ def detectAndDisplay(frame):
     resistors = resistor_cascade.detectMultiScale(frame_gray, 1.1, 25)
     for (x,y,w,h) in resistors:
         frame = cv.rectangle(frame, (x,y), (x+w, y+h), (255, 0, 0), 2)
+        print(frame.shape)
         # ROI = frame_gray[y:y+h, x:x+w]
         # secondPass = resistor_cascade.detectMultiScale(ROI, 1.01, 25)
         # for (x1,y1,w1,h1) in secondPass:
@@ -58,6 +60,5 @@ while True:
         display(frame)
     elif counter >= 100:
         detectAndDisplay(frame)
-        print(str(len(frame)) + "       " + str(len(frame[0])))
     if cv.waitKey(100) == 27: # ESC key
         break
