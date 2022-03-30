@@ -64,7 +64,7 @@ def main():
             Button.end(frame)
             Button.scan(frame)
 
-        if counter % 240 == 0:
+        if counter % 1000 == 0:
             detect.detect(frame)
             frame = detect.draw_ROI(frame)
             counter = 0
