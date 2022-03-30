@@ -42,7 +42,7 @@ class Detect:
         return frame
 
     def bands(self, resistor_img) -> None:
-
+        resistor_img = cv.resize(resistor_img, (400, 200))
         bilateral_filt = cv.bilateralFilter(resistor_img, 5, 80, 80)
         hsv = cv.cvtColor(bilateral_filt, cv.COLOR_BGR2HSV)
         # edge threshold filters out background and resistor body
@@ -89,7 +89,7 @@ class Detect:
 
     def show_values(self, frame):
         for i in range(len(self.resistors)):
-            bands = self.bands(self.resistors[i])
+            bands = self.bands(self.resistors[i][0])
             # printResult(bands, cliveimg, resClose[i][1])
             x, y, w, h = self.resistors[i][1]
             strVal = ""
