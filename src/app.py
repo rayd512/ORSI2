@@ -25,10 +25,11 @@ def on_click(event, x, y, flags, param):
             has_session = not has_session
         elif x > Button.pos_scan[0] and x < Button.pos_scan[0] + scan_w + \
                 10 and y > Button.pos_scan[1] and y < Button.pos_scan[1] + scan_h + 10:
-            detect.detect(frame)
-            frame = detect.draw_ROI(frame)
-            cv.imshow("scanner", frame)
-            sleep(2)
+            pass
+            # detect.detect(frame)
+            # frame = detect.draw_ROI(frame)
+            # cv.imshow("scanner", frame)
+            # sleep(2)
 
 
 # Keep state of buttons
@@ -36,7 +37,7 @@ has_session = False
 
 # Global access to db
 db = Database()
-detect = Detect()
+# detect = Detect()
 frame = None
 
 
@@ -63,13 +64,13 @@ def main():
             Button.end(frame)
             Button.scan(frame)
 
-        # if counter % 100 == 0:
-        #     detect.detect(frame)
-        #     frame = detect.draw_ROI(frame)
-        #     counter = 0
-        # else:
-        #     counter += 1
-            # Display the resulting frame
+        if counter % 240 == 0:
+            detect.detect(frame)
+            frame = detect.draw_ROI(frame)
+            counter = 0
+        else:
+            counter += 1
+        # Display the resulting frame
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
