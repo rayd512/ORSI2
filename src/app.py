@@ -72,7 +72,7 @@ def main():
         # else:
         #     counter += 1
 
-        if time.time() - start > 1:
+        if time.time() - start > 5:
             print("hi")
             detect.detect(frame)
             frame = detect.draw_ROI(frame)
