@@ -59,7 +59,7 @@ class Detect:
                 mask = cv.bitwise_or(redMask2, mask, mask)
 
             mask = cv.bitwise_and(mask, thresh, mask=mask)
-            im2, contours, hierarchy = cv.findContours(
+            contours, hierarchy = cv.findContours(
                 mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
             # filter invalid contours, store valid ones
