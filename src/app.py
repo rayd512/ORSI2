@@ -34,6 +34,12 @@ def main():
     # Initialize the camera and grab a reference to the raw camera capture
     cap = cv.VideoCapture(0)
 
+    # Change to fullscreen
+    cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
+    cv.setWindowProperty(
+        "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+    detect = Detect()
+    counter = 0
     while True:
         ret, frame = cap.read()
 
@@ -44,12 +50,13 @@ def main():
             Button.end(frame)
             Button.scan(frame)
 
-        # Change to fullscreen
-        cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
-        cv.setWindowProperty(
-            "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
-
-        # Display the resulting frame
+        if counter % 100 == 0:
+            detect.detect(frame)
+            frame = detect.draw_ROI(frame)
+            counter = 0
+        else:
+            counter += 1
+            # Display the resulting frame
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
@@ -57,7 +64,7 @@ def main():
         # the 'q' button is set as the
         # quitting button you may use any
         # desired button of your choice
-        if cv.waitKey(1) & 0xFF == ord('q') or cv.waitKey(1) & 0xFF == 27:
+        if cv.waitKey(10) & 0xFF == ord('q') or cv.waitKey(10) & 0xFF == 27:
             break
 
     # Destroy all the windows
