@@ -1,4 +1,5 @@
 
+from time import sleep
 import cv2 as cv
 import numpy as np
 from components import *
@@ -27,8 +28,7 @@ def on_click(event, x, y, flags, param):
             detect.detect(frame)
             frame = detect.draw_ROI(frame)
             cv.imshow("scanner", frame)
-            while True:
-                pass
+            sleep(5)
 
 
 # Keep state of buttons
