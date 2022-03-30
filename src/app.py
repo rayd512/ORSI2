@@ -51,12 +51,12 @@ def main():
             Button.end(frame)
             Button.scan(frame)
 
-        if counter % 100 == 0:
-            detect.detect(frame)
-            frame = detect.draw_ROI(frame)
-            counter = 0
-        else:
-            counter += 1
+        # if counter % 100 == 0:
+        #     detect.detect(frame)
+        #     frame = detect.draw_ROI(frame)
+        #     counter = 0
+        # else:
+        #     counter += 1
             # Display the resulting frame
         cv.imshow("scanner", frame)
 
