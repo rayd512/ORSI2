@@ -72,7 +72,7 @@ def main():
         # else:
         #     counter += 1
 
-        if time.time() - start > 5:
+        if time.time() - start > 1:
             print("hi")
             detect.detect(frame)
             start = time.time()
