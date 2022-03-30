@@ -28,7 +28,7 @@ def on_click(event, x, y, flags, param):
             detect.detect(frame)
             frame = detect.draw_ROI(frame)
             cv.imshow("scanner", frame)
-            sleep(5)
+            sleep(2)
 
 
 # Keep state of buttons
