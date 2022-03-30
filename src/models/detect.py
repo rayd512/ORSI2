@@ -14,12 +14,12 @@ class Detect:
     def detect(self, frame: List[int]) -> None:
         frame_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
 
-        self.resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
+        self.resistors = []
         self.resistor_imgs = []
-        for (x, y, w, h), i in enumerate(self.resistors):
-            if not self.cascade.detectMultiScale(frame_gray[y:y+h, x:x+w], 1.1, 25):
-                self.resistors.pop(i)
-            else:
+        resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
+        for i, (x, y, w, h) in enumerate(resistors):
+            if self.cascade.detectMultiScale(frame_gray[y:y+h, x:x+w], 1.1, 25):
+                self.resistors.append(resistors[i])
                 self.resistor_imgs.append(frame[y:y+h, x:x+w])
 
     def draw_ROI(self, frame: List[int]) -> List[int]:
