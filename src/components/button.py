@@ -71,8 +71,8 @@ class Button:
         x, y = Button.pos_scan
         (text_w, text_h), _ = cv2.getTextSize(
             Button.scan_text, font, Button.font_size, Button.font_thickness)
-        cv2.rectangle(img, Button.posScan, (x + text_w + 10,
-                                            y + text_h + 10), Button.text_color_bg, -1)
+        cv2.rectangle(img, Button.pos_scan, (x + text_w + 10,
+                                             y + text_h + 10), Button.text_color_bg, -1)
         cv2.putText(
             img,
             Button.scan_text,
