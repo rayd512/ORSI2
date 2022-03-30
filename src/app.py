@@ -63,7 +63,7 @@ def main():
             detect.show_values(frame)
             start = time.time()
 
-        frame = detect.draw_ROI(frame)
+        # frame = detect.draw_ROI(frame)
         # Display the resulting frame
         cv.imshow("scanner", frame)
 
