@@ -15,7 +15,8 @@ def on_click(event, x, y, flags, param):
                                          Button.font, Button.font_size, Button.font_thickness)
     # check if the click is within the dimensions of the button
     if event == cv.EVENT_LBUTTONDOWN:
-        if x > Button.pos[0] and x < Button.pos[0] + text_w + 10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
+        if x > Button.pos[0] and x < Button.pos[0] + text_w + \
+                10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
             if not hasSession:
                 db.new_session()
             hasSession = not hasSession
