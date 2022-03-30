@@ -75,9 +75,9 @@ def main():
         if time.time() - start > 5:
             print("hi")
             detect.detect(frame)
-            frame = detect.draw_ROI(frame)
             start = time.time()
 
+        frame = detect.draw_ROI(frame)
         # Display the resulting frame
         cv.imshow("scanner", frame)
 
