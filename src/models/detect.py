@@ -18,9 +18,10 @@ class Detect:
         self.resistor_imgs = []
         resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
         for i, (x, y, w, h) in enumerate(resistors):
-            if len(self.cascade.detectMultiScale(frame_gray[y:y+h, x:x+w], 1.1, 25)):
+            if len(self.cascade.detectMultiScale(
+                    frame_gray[y:y + h, x:x + w], 1.1, 25)) > 0:
                 self.resistors.append(resistors[i])
-                self.resistor_imgs.append(frame[y:y+h, x:x+w])
+                self.resistor_imgs.append(frame[y:y + h, x:x + w])
 
     def draw_ROI(self, frame: List[int]) -> List[int]:
         for (x, y, w, h) in self.resistors:
