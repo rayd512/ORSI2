@@ -13,6 +13,8 @@ def on_click(event, x, y, flags, param):
     bounding_box = Button.end_text if hasSession else Button.start_text
     (text_w, text_h), _ = cv.getTextSize(bounding_box,
                                          Button.font, Button.font_size, Button.font_thickness)
+    (scan_w, scan_h), _ = cv.getTextSize(Button.scan_text,
+                                         Button.font, Button.font_size, Button.font_thickness)
     # check if the click is within the dimensions of the button
     if event == cv.EVENT_LBUTTONDOWN:
         if x > Button.pos[0] and x < Button.pos[0] + text_w + \
@@ -20,6 +22,13 @@ def on_click(event, x, y, flags, param):
             if not hasSession:
                 db.new_session()
             hasSession = not hasSession
+        elif x > Button.pos_scan[0] and x < Button.pos_scan[0] + scan_w + \
+                10 and y > Button.pos_scan[1] and y < Button.pos_scan[1] + scan_h + 10:
+            detect.detect(frame)
+            frame = detect.draw_ROI(frame)
+            cv.imshow("scanner", frame)
+            while True:
+                continue
 
 
 # Keep state of buttons

@@ -7,7 +7,7 @@ import cv2
 class Button:
 
     pos = (0, 0)
-    posScan = (320, 0)
+    pos_scan = (320, 0)
     font_thickness = 2
     text_color = (0, 255, 0)
     text_color_bg = (0, 0, 0)
@@ -68,7 +68,7 @@ class Button:
     @staticmethod
     def scan(img, font=cv2.FONT_HERSHEY_PLAIN):
 
-        x, y = Button.posScan
+        x, y = Button.pos_scan
         (text_w, text_h), _ = cv2.getTextSize(
             Button.scan_text, font, Button.font_size, Button.font_thickness)
         cv2.rectangle(img, Button.posScan, (x + text_w + 10,
