@@ -7,7 +7,7 @@ import cv2
 class Button:
 
     pos = (0, 0)
-    posScan = (320, 0)
+    pos_scan = (320, 0)
     font_thickness = 2
     text_color = (0, 255, 0)
     text_color_bg = (0, 0, 0)
@@ -26,8 +26,20 @@ class Button:
             Button.start_text, font, Button.font_size, Button.font_thickness)
         cv2.rectangle(img, Button.pos, (x + text_w + 10, y +
                                         text_h + 10), Button.text_color_bg, -1)
-        cv2.putText(img, Button.start_text, (x + 5, y + text_h + Button.font_size - 1 + 5),
-                    font, Button.font_size, Button.text_color, Button.font_thickness)
+        cv2.putText(
+            img,
+            Button.start_text,
+            (x +
+             5,
+             y +
+             text_h +
+             Button.font_size -
+             1 +
+             5),
+            font,
+            Button.font_size,
+            Button.text_color,
+            Button.font_thickness)
 
     @staticmethod
     def end(img, font=cv2.FONT_HERSHEY_PLAIN):
@@ -38,22 +50,40 @@ class Button:
         cv2.rectangle(img, Button.pos, (x + text_w + 10, y +
                                         text_h + 10), Button.text_color_bg, -1)
 
-        cv2.putText(img, Button.end_text, (x + 5, y + text_h + Button.font_size - 1 + 5),
-                    font, Button.font_size, Button.text_color, Button.font_thickness)
+        cv2.putText(
+            img,
+            Button.end_text,
+            (x +
+             5,
+             y +
+             text_h +
+             Button.font_size -
+             1 +
+             5),
+            font,
+            Button.font_size,
+            Button.text_color,
+            Button.font_thickness)
 
     @staticmethod
     def scan(img, font=cv2.FONT_HERSHEY_PLAIN):
-        
-        x, y = Button.posScan
+
+        x, y = Button.pos_scan
         (text_w, text_h), _ = cv2.getTextSize(
             Button.scan_text, font, Button.font_size, Button.font_thickness)
-        cv2.rectangle(img, Button.posScan, (x + text_w + 10, y +
-                                        text_h + 10), Button.text_color_bg, -1)
-        cv2.putText(img, Button.scan_text, (x + 5, y + text_h + Button.font_size - 1 + 5),
-                    font, Button.font_size, Button.text_color, Button.font_thickness)
-
-
-
-
-
-
+        cv2.rectangle(img, Button.pos_scan, (x + text_w + 10,
+                                             y + text_h + 10), Button.text_color_bg, -1)
+        cv2.putText(
+            img,
+            Button.scan_text,
+            (x +
+             5,
+             y +
+             text_h +
+             Button.font_size -
+             1 +
+             5),
+            font,
+            Button.font_size,
+            Button.text_color,
+            Button.font_thickness)
