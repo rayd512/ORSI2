@@ -1,5 +1,4 @@
-
-from time import sleep
+import time
 import cv2 as cv
 import numpy as np
 from components import *
@@ -54,6 +53,7 @@ def main():
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
     detect = Detect()
     counter = 0
+    start = time.time()
     while True:
         ret, frame = cap.read()
 
@@ -64,12 +64,20 @@ def main():
             Button.end(frame)
             Button.scan(frame)
 
-        if counter % 10000 == 0:
+        # if counter % 10000 == 0:
+        #     print("hi")
+        #     detect.detect(frame)
+        #     frame = detect.draw_ROI(frame)
+        #     counter = 0
+        # else:
+        #     counter += 1
+
+        if time.time() - start > 1:
+            print("hi")
             detect.detect(frame)
             frame = detect.draw_ROI(frame)
-            counter = 0
-        else:
-            counter += 1
+            start = time.time()
+
         # Display the resulting frame
         cv.imshow("scanner", frame)
 
