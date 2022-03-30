@@ -60,8 +60,8 @@ def main():
 
         if time.time() - start > 1:
             detect.detect(frame)
-            detect.show_values(frame)
             start = time.time()
+        detect.show_values(frame)
 
         # frame = detect.draw_ROI(frame)
         # Display the resulting frame
