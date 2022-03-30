@@ -18,7 +18,7 @@ class Detect:
         self.resistor_imgs = []
         resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
         for i, (x, y, w, h) in enumerate(resistors):
-            if len(self.cascade.detectMultiScale(frame_gray[y:y+h, x:x+w], 1.1, 25)) > 0:
+            if len(self.cascade.detectMultiScale(frame_gray[y-10:y+h+10, x-10:x+w+10], 1.1, 25)) > 0:
                 self.resistors.append(resistors[i])
                 self.resistor_imgs.append(frame[y:y+h, x:x+w])
 
