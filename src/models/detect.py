@@ -95,6 +95,7 @@ class Detect:
             x, y, w, h = self.resistors[i]
             strVal = ""
             if (len(bands) in [3, 4, 5]):
+                print("yeah")
                 for band in bands[:-1]:
                     strVal += str(band[3])
                 intVal = int(strVal)
