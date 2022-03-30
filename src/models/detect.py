@@ -6,6 +6,7 @@ class Detect:
     def __init__(self):
         self.cascade = cv.CascadeClassifier()
         self.resistors = []
+        self.MIN_AREA = 700
         self.COLOR_BOUNDS = [
             [(0, 0, 0), (179, 255, 93), "BLACK", 0, (0, 0, 0)],
             [(0, 90, 10), (15, 250, 100), "BROWN", 1, (0, 51, 102)],
