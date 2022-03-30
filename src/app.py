@@ -25,10 +25,6 @@ def on_click(event, x, y, flags, param):
         elif x > Button.pos_scan[0] and x < Button.pos_scan[0] + scan_w + \
                 10 and y > Button.pos_scan[1] and y < Button.pos_scan[1] + scan_h + 10:
             pass
-            # detect.detect(frame)
-            # frame = detect.draw_ROI(frame)
-            # cv.imshow("scanner", frame)
-            # sleep(2)
 
 
 # Keep state of buttons
@@ -36,7 +32,6 @@ has_session = False
 
 # Global access to db
 db = Database()
-# detect = Detect()
 frame = None
 
 
@@ -52,7 +47,6 @@ def main():
     cv.setWindowProperty(
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
     detect = Detect()
-    counter = 0
     start = time.time()
     while True:
         ret, frame = cap.read()
@@ -63,14 +57,6 @@ def main():
         else:
             Button.end(frame)
             Button.scan(frame)
-
-        # if counter % 10000 == 0:
-        #     print("hi")
-        #     detect.detect(frame)
-        #     frame = detect.draw_ROI(frame)
-        #     counter = 0
-        # else:
-        #     counter += 1
 
         if time.time() - start > 1:
             print("hi")
