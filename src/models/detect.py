@@ -1,4 +1,3 @@
-import time
 from typing import List
 import cv2 as cv
 
@@ -108,4 +107,3 @@ class Detect:
             # draw a red rectangle indicating an error reading the bands
             cv.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
         cv.imshow("scanner", frame)
-        time.sleep(4)
