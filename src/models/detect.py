@@ -42,7 +42,7 @@ class Detect:
             frame = cv.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
         return frame
 
-    def bands(self, resistor_img) -> None:
+    def _bands(self, resistor_img) -> None:
         resistor_img = cv.resize(resistor_img, (400, 200))
         bilateral_filt = cv.bilateralFilter(resistor_img, 5, 80, 80)
         hsv = cv.cvtColor(bilateral_filt, cv.COLOR_BGR2HSV)
@@ -68,7 +68,7 @@ class Detect:
                 if (self._valid_contour(contours[k])):
                     left = tuple(
                         contours[k][contours[k][:, :, 0].argmin()][0])
-                    resistor_pos.append([left + tuple(color[2:])])
+                    resistor_pos += [left + tuple(color[2:])]
                     cv.circle(bilateral_filt, left,
                               5, (255, 0, 255), -1)
                 else:
@@ -90,7 +90,7 @@ class Detect:
 
     def show_values(self, frame):
         for i in range(len(self.resistors)):
-            bands = self.bands(self.resistor_imgs[i])
+            bands = self._bands(self.resistor_imgs[i])
             # printResult(bands, cliveimg, resClose[i][1])
             x, y, w, h = self.resistors[i]
             strVal = ""
