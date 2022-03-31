@@ -31,7 +31,7 @@ def display(frame):
 
 
 parser = argparse.ArgumentParser(description='Code for Resistor Detector.')
-parser.add_argument('--resistor_cascade', help='Path to resistor cascade.', default='haarcascade_resistors_0.xml')
+parser.add_argument('--resistor_cascade', help='Path to resistor cascade.', default='cascade.xml')
 parser.add_argument('--camera', help='Camera divide number.', type=int, default=0)
 
 args = parser.parse_args()
