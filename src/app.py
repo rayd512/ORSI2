@@ -41,8 +41,12 @@ def main():
     # Initialize the camera and grab a reference to the raw camera capture
     camera = PiCamera(resolution=(640, 480), framerate=32)
     cap = PiRGBArray(camera, size=(640, 480))
-    camera.awb_mode = 'fluorescent'
     time.sleep(2)
+    camera.shutter_speed = camera.exposure_speed
+    camera.exposure_mode = 'off'
+    g = camera.awb_gains
+    camera.awb_mode = 'off'
+    camera.awb_gains = g
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
