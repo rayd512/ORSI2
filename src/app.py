@@ -58,6 +58,8 @@ def main():
     cv.createTrackbar('red_stonks_dec', 'scanner', 0, 9, nothing)
     cv.createTrackbar('blue_stonks', 'scanner', 0, 8, nothing)
     cv.createTrackbar('blue_stonks_dec', 'scanner', 0, 9, nothing)
+    cv.createTrackbar('brightness', 'scanner', 0, 100, nothing)
+    cv.createTrackbar('contrast', 'scanner', -100, 100, nothing)
     detect = Detect()
     start = time.time()
     for image in camera.capture_continuous(cap, format="bgr", use_video_port=True):
@@ -83,6 +85,8 @@ def main():
         b_g_d = float(cv.getTrackbarPos('blue_stonks_dec', 'scanner'))
         gainz = (r_g + r_g_d/10, b_g + b_g_d/10)
         camera.awb_gains = gainz
+        camera.brightness = cv.getTrackbarPos('brightness', 'scanner')
+        camera.contrast = cv.getTrackbarPos('contrast', 'scanner')
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
