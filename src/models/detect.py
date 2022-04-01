@@ -60,6 +60,10 @@ class Detect:
                 mask = cv.bitwise_or(redMask2, mask, mask)
 
             mask = cv.bitwise_and(mask, thresh, mask=mask)
+            cv.imshow("scanner", mask)
+            print(color[3])
+            while cv.waitKey(0) & 0xFF != ord('n'):
+                pass
             contours, hierarchy = cv.findContours(
                 mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
@@ -75,9 +79,9 @@ class Detect:
                     contours.pop(k)
 
             cv.drawContours(bilateral_filt, contours, -1, color[-1], 3)
-        cv.imshow("scanner", bilateral_filt)
-        while cv.waitKey(0) & 0xFF != ord('n'):
-            pass
+        # cv.imshow("scanner", bilateral_filt)
+        # while cv.waitKey(0) & 0xFF != ord('n'):
+        #     pass
         return sorted(resistor_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
