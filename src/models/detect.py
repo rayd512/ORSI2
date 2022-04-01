@@ -76,7 +76,7 @@ class Detect:
 
             cv.drawContours(bilateral_filt, contours, -1, color[-1], 3)
             cv.imshow("scanner", bilateral_filt)
-            cv.waitKey()
+            cv.waitKey(0)
         return sorted(resistor_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
