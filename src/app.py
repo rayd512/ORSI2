@@ -35,7 +35,13 @@ has_session = False
 db = Database()
 
 
+def nothing(x):
+    pass
+
 def main():
+    cv2.createTrackbar('red_stonks', 'scanner', 0.0, 8.0, nothing)
+    cv2.createTrackbar('blue_stonks', 'scanner', 0.0, 8.0, nothing)
+
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     # Initialize the camera and grab a reference to the raw camera capture
@@ -47,7 +53,6 @@ def main():
     g = camera.awb_gains
     camera.awb_mode = 'off'
     camera.awb_gains = (0.0, 0.0)
-    r_g, b_g = 0.0, 0.0
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
@@ -76,8 +81,10 @@ def main():
         if (r_g > 8.0):
             r_g = 0.0
             b_g = 0.0
-
-        camera.awb_gains = (r_g, b_g)
+        r_g = cv2.getTrackbarPos('red_stonks', 'scanner')
+        b_g = cv2.getTrackbarPos('blue_stonks', 'scanner')
+        gainz = (r_g, b_g)
+        camera.awb_gains = gainz
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
