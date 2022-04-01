@@ -39,8 +39,8 @@ def nothing(x):
     pass
 
 def main():
-    cv2.createTrackbar('red_stonks', 'scanner', 0.0, 8.0, nothing)
-    cv2.createTrackbar('blue_stonks', 'scanner', 0.0, 8.0, nothing)
+    cv.createTrackbar('red_stonks', 'scanner', 0.0, 8.0, nothing)
+    cv.createTrackbar('blue_stonks', 'scanner', 0.0, 8.0, nothing)
 
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
@@ -81,8 +81,8 @@ def main():
         if (r_g > 8.0):
             r_g = 0.0
             b_g = 0.0
-        r_g = cv2.getTrackbarPos('red_stonks', 'scanner')
-        b_g = cv2.getTrackbarPos('blue_stonks', 'scanner')
+        r_g = cv.getTrackbarPos('red_stonks', 'scanner')
+        b_g = cv.getTrackbarPos('blue_stonks', 'scanner')
         gainz = (r_g, b_g)
         camera.awb_gains = gainz
         cv.imshow("scanner", frame)
