@@ -21,6 +21,8 @@ class Detect:
         ]
         self.RED_TOP_LOWER = (160, 30, 80)
         self.RED_TOP_UPPER = (179, 255, 200)
+
+    def _load_cascade(self):
         if not self.cascade.load(cv.samples.findFile(
                 "src/models/haarcascade_resistors_0.xml")):
             raise Exception("Could not load face cascade!")
@@ -33,7 +35,7 @@ class Detect:
         resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
         for i, (x, y, w, h) in enumerate(resistors):
             if len(self.cascade.detectMultiScale(
-                    frame_gray[y:y + h, x:x + w], 1.1, 25)) > 0 or True:
+                    frame_gray[y:y + h, x:x + w], 1.1, 25)) > 0:
                 self.resistors.append(resistors[i])
                 self.resistor_imgs.append(frame[y:y + h, x:x + w])
 
@@ -42,7 +44,7 @@ class Detect:
             frame = cv.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
         return frame
 
-    def _bands(self, resistor_img) -> None:
+    def _find_bands(self, resistor_img) -> None:
         resistor_img = cv.resize(resistor_img, (400, 200))
         bilateral_filt = cv.bilateralFilter(resistor_img, 5, 80, 80)
         hsv = cv.cvtColor(bilateral_filt, cv.COLOR_BGR2HSV)
@@ -97,7 +99,7 @@ class Detect:
 
     def show_values(self, frame):
         for i in range(len(self.resistors)):
-            bands = self._bands(self.resistor_imgs[i])
+            bands = self._find_find_bands(self.resistor_imgs[i])
             # print(bands)
             # printResult(bands, cliveimg, resClose[i][1])
             x, y, w, h = self.resistors[i]
