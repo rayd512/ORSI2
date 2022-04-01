@@ -73,10 +73,10 @@ def main():
         # Display the resulting frame
         r_g += 0.1
         b_g += 0.1
-        if (r_g > 8.0) {
+        if (r_g > 8.0):
             r_g = 0.0
             b_g = 0.0
-        }
+
         camera.awb_gains = (r_g, b_g)
         cv.imshow("scanner", frame)
 
