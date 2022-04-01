@@ -49,15 +49,15 @@ def main():
     camera.exposure_mode = 'off'
     g = camera.awb_gains
     camera.awb_mode = 'off'
-    camera.awb_gains = (0.0, 0.0)
+    # camera.awb_gains = (0.0, 0.0)
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
-    cv.createTrackbar('red_stonks', 'scanner', 0, 8, nothing)
-    cv.createTrackbar('red_stonks_dec', 'scanner', 0, 9, nothing)
-    cv.createTrackbar('blue_stonks', 'scanner', 0, 8, nothing)
-    cv.createTrackbar('blue_stonks_dec', 'scanner', 0, 9, nothing)
+    # cv.createTrackbar('red_stonks', 'scanner', 0, 8, nothing)
+    # cv.createTrackbar('red_stonks_dec', 'scanner', 0, 9, nothing)
+    # cv.createTrackbar('blue_stonks', 'scanner', 0, 8, nothing)
+    # cv.createTrackbar('blue_stonks_dec', 'scanner', 0, 9, nothing)
     cv.createTrackbar('brightness', 'scanner', 0, 100, nothing)
     cv.createTrackbar('contrast', 'scanner', -100, 100, nothing)
     detect = Detect()
@@ -79,11 +79,11 @@ def main():
 
         # frame = detect.draw_ROI(frame)
         # Display the resulting frame
-        r_g = float(cv.getTrackbarPos('red_stonks', 'scanner'))
-        r_g_d = float(cv.getTrackbarPos('red_stonks_dec', 'scanner'))
-        b_g = float(cv.getTrackbarPos('blue_stonks', 'scanner'))
-        b_g_d = float(cv.getTrackbarPos('blue_stonks_dec', 'scanner'))
-        gainz = (r_g + r_g_d/10, b_g + b_g_d/10)
+        # r_g = float(cv.getTrackbarPos('red_stonks', 'scanner'))
+        # r_g_d = float(cv.getTrackbarPos('red_stonks_dec', 'scanner'))
+        # b_g = float(cv.getTrackbarPos('blue_stonks', 'scanner'))
+        # b_g_d = float(cv.getTrackbarPos('blue_stonks_dec', 'scanner'))
+        # gainz = (r_g + r_g_d/10, b_g + b_g_d/10)
         camera.awb_gains = gainz
         camera.brightness = cv.getTrackbarPos('brightness', 'scanner')
         camera.contrast = cv.getTrackbarPos('contrast', 'scanner')
