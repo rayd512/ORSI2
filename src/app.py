@@ -39,7 +39,7 @@ def main():
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     # Initialize the camera and grab a reference to the raw camera capture
-    camera = PiCamera((640, 480), 32)
+    camera = PiCamera(resolution=(640, 480), framerate=32)
     cap = PiRGBArray(camera, size=(640, 480))
     time.sleep(2)
     # Change to fullscreen
