@@ -62,7 +62,7 @@ class Detect:
             mask = cv.bitwise_and(mask, thresh, mask=mask)
             cv.imshow("scanner", mask)
             print(color[3])
-            while cv.waitKey(0) & 0xFF != ord('n'):
+            while cv.waitKey(10) & 0xFF != ord('n'):
                 pass
             contours, hierarchy = cv.findContours(
                 mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
