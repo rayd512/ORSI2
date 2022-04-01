@@ -91,6 +91,7 @@ class Detect:
     def show_values(self, frame):
         for i in range(len(self.resistors)):
             bands = self._bands(self.resistor_imgs[i])
+            print(bands)
             # printResult(bands, cliveimg, resClose[i][1])
             x, y, w, h = self.resistors[i]
             strVal = ""
