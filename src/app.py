@@ -39,11 +39,6 @@ def nothing(x):
     pass
 
 def main():
-    cv.createTrackbar('red_stonks', 'scanner', 0, 8, nothing)
-    cv.createTrackbar('red_stonks_dec', 'scanner', 0, 9, nothing)
-    cv.createTrackbar('blue_stonks', 'scanner', 0, 8, nothing)
-    cv.createTrackbar('blue_stonks_dec', 'scanner', 0, 9, nothing)
-
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     # Initialize the camera and grab a reference to the raw camera capture
@@ -59,6 +54,10 @@ def main():
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+    cv.createTrackbar('red_stonks', 'scanner', 0, 8, nothing)
+    cv.createTrackbar('red_stonks_dec', 'scanner', 0, 9, nothing)
+    cv.createTrackbar('blue_stonks', 'scanner', 0, 8, nothing)
+    cv.createTrackbar('blue_stonks_dec', 'scanner', 0, 9, nothing)
     detect = Detect()
     start = time.time()
     for image in camera.capture_continuous(cap, format="bgr", use_video_port=True):
