@@ -39,8 +39,10 @@ def nothing(x):
     pass
 
 def main():
-    cv.createTrackbar('red_stonks', 'scanner', 0.0, 8.0, nothing)
-    cv.createTrackbar('blue_stonks', 'scanner', 0.0, 8.0, nothing)
+    cv.createTrackbar('red_stonks', 'scanner', 0, 8, nothing)
+    cv.createTrackbar('red_stonks_dec', 'scanner', 0, 9, nothing)
+    cv.createTrackbar('blue_stonks', 'scanner', 0, 8, nothing)
+    cv.createTrackbar('blue_stonks_dec', 'scanner', 0, 9, nothing)
 
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
@@ -76,14 +78,11 @@ def main():
 
         # frame = detect.draw_ROI(frame)
         # Display the resulting frame
-        r_g += 0.1
-        b_g += 0.1
-        if (r_g > 8.0):
-            r_g = 0.0
-            b_g = 0.0
-        r_g = cv.getTrackbarPos('red_stonks', 'scanner')
-        b_g = cv.getTrackbarPos('blue_stonks', 'scanner')
-        gainz = (r_g, b_g)
+        r_g = float(cv.getTrackbarPos('red_stonks', 'scanner'))
+        r_g_d = float(cv.getTrackbarPos('red_stonks_dec', 'scanner'))
+        b_g = float(cv.getTrackbarPos('blue_stonks', 'scanner'))
+        b_g_d = float(cv.getTrackbarPos('blue_stonks_dec', 'scanner'))
+        gainz = (r_g + r_g_d, b_g + b_g_d)
         camera.awb_gains = gainz
         cv.imshow("scanner", frame)
 
