@@ -1,8 +1,9 @@
 import time
 import cv2 as cv
-import numpy as np
 from components import *
 from models import *
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 
 
 def on_click(event, x, y, flags, param):
@@ -32,24 +33,23 @@ has_session = False
 
 # Global access to db
 db = Database()
-frame = None
 
 
 def main():
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     # Initialize the camera and grab a reference to the raw camera capture
-    global frame
-    cap = cv.VideoCapture(0)
-
+    camera = PiCamera((640, 480), 32)
+    cap = PiRGBArray(camera, size=(640, 480))
+    time.sleep(2)
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
     detect = Detect()
     start = time.time()
-    while True:
-        ret, frame = cap.read()
+    for image in camera.capture_continuous(cap, format="bgr", use_video_port=True):
+        frame = image.array
 
         # Draw start / end button
         if not has_session:
@@ -68,6 +68,8 @@ def main():
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
+
+        cap.truncate(0)
 
         # the 'q' button is set as the
         # quitting button you may use any
