@@ -47,8 +47,8 @@ def main():
     time.sleep(2)
     camera.shutter_speed = camera.exposure_speed
     camera.exposure_mode = 'off'
-    g = camera.awb_gains
-    camera.awb_mode = 'off'
+    # g = camera.awb_gains
+    # camera.awb_mode = 'off'
     # camera.awb_gains = (0.0, 0.0)
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
