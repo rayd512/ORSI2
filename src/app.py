@@ -81,7 +81,7 @@ def main():
         r_g_d = float(cv.getTrackbarPos('red_stonks_dec', 'scanner'))
         b_g = float(cv.getTrackbarPos('blue_stonks', 'scanner'))
         b_g_d = float(cv.getTrackbarPos('blue_stonks_dec', 'scanner'))
-        gainz = (r_g + r_g_d, b_g + b_g_d)
+        gainz = (r_g + r_g_d/10, b_g + b_g_d/10)
         camera.awb_gains = gainz
         cv.imshow("scanner", frame)
 
