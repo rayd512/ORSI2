@@ -75,6 +75,8 @@ class Detect:
                     contours.pop(k)
 
             cv.drawContours(bilateral_filt, contours, -1, color[-1], 3)
+            cv.imshow("scanner", bilateral_filt)
+            cv.waitKey()
         return sorted(resistor_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
@@ -96,7 +98,6 @@ class Detect:
             x, y, w, h = self.resistors[i]
             strVal = ""
             if (len(bands) in [3, 4, 5]):
-                print("yeah")
                 for band in bands[:-1]:
                     strVal += str(band[3])
                 intVal = int(strVal)
