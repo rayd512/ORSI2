@@ -8,12 +8,12 @@ class Detect:
         self.resistors = []
         self.MIN_AREA = 700
         self.COLOR_BOUNDS = [
-            [(0, 0, 0), (179, 255, 10), "BLACK", 0, (0, 0, 0)],
+            [(0, 0, 0), (179, 255, 2), "BLACK", 0, (0, 0, 0)],
             [(0, 104, 0), (11, 255, 46), "BROWN", 1, (0, 51, 102)],
             [(0, 30, 50), (6, 255, 200), "RED", 2, (0, 0, 255)],
-            [(2, 235, 68), (121, 255, 225), "ORANGE", 3, (0, 128, 255)],
-            [(30, 170, 100), (40, 250, 255), "YELLOW", 4, (0, 255, 255)],
-            [(35, 20, 110), (60, 45, 120), "GREEN", 5, (0, 255, 0)],
+            [(2, 235, 100), (121, 255, 225), "ORANGE", 3, (0, 128, 255)],
+            [(20, 200, 15), (30, 255, 185), "YELLOW", 4, (0, 255, 255)],
+            [(35, 130, 0), (70, 255, 255), "GREEN", 5, (0, 255, 0)],
             [(65, 0, 85), (115, 30, 147), "BLUE", 6, (255, 0, 0)],
             [(120, 40, 100), (140, 250, 220), "PURPLE", 7, (255, 0, 127)],
             [(0, 0, 50), (179, 50, 80), "GRAY", 8, (128, 128, 128)],
@@ -68,7 +68,10 @@ class Detect:
                 mask = cv2.bitwise_or(redMask2, mask, mask)
 
             mask = cv2.bitwise_and(mask, thresh, mask=mask)
-
+            cv2.imshow("scanner", mask)
+            print(color[2])
+            while cv2.waitKey(10) & 0xFF != ord('n'):
+                pass
             if (cv2.__version__ == "3.4.16"):
                 _, contours, hierarchy = cv2.findContours(
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)

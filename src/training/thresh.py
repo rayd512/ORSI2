@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+import time
 
 def nothing(x):
     pass
@@ -30,6 +30,7 @@ cv2.setTrackbarPos('VMax', 'image', 255)
 hMin = sMin = vMin = hMax = sMax = vMax = 0
 phMin = psMin = pvMin = phMax = psMax = pvMax = 0
 cap = cv2.VideoCapture(0)
+index = True
 
 while(1):
     # Get current positions of all trackbars
@@ -74,8 +75,15 @@ while(1):
         pvMax = vMax
 
     # Display result image
-    cv2.imshow('image', mask)
+    if index:
+        cv2.imshow('image', mask)
+    else:
+        cv2.imshow('image', frame)
+    
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
+
+    if cv2.waitKey(10) & 0xFF == ord('w'):
+        index = not index
 
 cv2.destroyAllWindows()
