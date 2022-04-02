@@ -1,5 +1,6 @@
 from typing import List
 import cv2
+import imutils
 
 
 class Detect:
@@ -140,9 +141,22 @@ class Detect:
         else:
             contours, hierarchy = cv2.findContours(
                 mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+
         for i in range(len(contours)):
             cv2.drawContours(bilateral_filt, contours, i, (0, 255, 0),
                              2, cv2.LINE_8, hierarchy, 0)
+        left_most = None
+        right_most = None
+        for i in range(len(contours)):
+            left = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
+            right = tuple(contours[i][contours[i][:, :, 0].argmax()][0])
+            if not left_most:
+                left_most = left
+            if not right_most:
+                right_most = right
+            right_most = max(right, right_most)
+            left_most = max(left, left_most)
+        print(left_most, right_most)
         cv2.imshow("scanner", bilateral_filt)
         while cv2.waitKey(10) & 0xFF != ord('n'):
             pass
