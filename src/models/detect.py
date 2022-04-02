@@ -148,6 +148,8 @@ class Detect:
         left_most = None
         right_most = None
         for i in range(len(contours)):
+            if cv2.contourArea(contours[i]) < 30:
+                continue
             left = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
             right = tuple(contours[i][contours[i][:, :, 0].argmax()][0])
             if not left_most:
