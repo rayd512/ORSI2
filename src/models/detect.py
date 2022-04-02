@@ -31,7 +31,7 @@ class Detect:
     def detect(self, frame: List[int]) -> None:
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        self.resistor_imgs = []
+        self.resistors = []
         resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
         for i, (x, y, w, h) in enumerate(resistors):
             self.resistors.append(
