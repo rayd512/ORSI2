@@ -118,7 +118,6 @@ class Detect:
             return False
         x, y, w, h = cv2.boundingRect(contour)
         aspectRatio = float(w) / h
-        print(aspectRatio)
         if (aspectRatio > 1.5):
             return False
         return True
