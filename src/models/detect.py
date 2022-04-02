@@ -127,6 +127,7 @@ class Detect:
         return True
 
     def show_values(self, frame):
+        fallback_value = None
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
             x, y, w, h = self.resistors[i]["resistor"]
@@ -136,12 +137,16 @@ class Detect:
                     resistor_val += str(band[-1].multiplier)
                 resistor_val = int(resistor_val)
                 resistor_val *= 10**bands[-1][-1].multiplier
+                fallback_value = resistor_val
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 continue
 
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
-                        cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            if not fallback_value:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
+                            cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            else:
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
         cv2.imshow("scanner", frame)
