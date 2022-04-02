@@ -46,8 +46,8 @@ def main():
 
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
-    cv.setWindowProperty(
-        "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+    # cv.setWindowProperty(
+    #     "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
     start = time.time()
     while True:
         ret, frame = cap.read()
