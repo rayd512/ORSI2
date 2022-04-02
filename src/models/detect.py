@@ -93,8 +93,7 @@ class Detect:
                         contours[k][contours[k][:, :, 0].argmin()][0])
                     # resistor_pos += [left +
                     #                  (band.color, band.multiplier, band.draw_color)]
-                    resistor_pos.append(
-                        (*left, band.color, band.multiplier, band.draw_color))
+                    resistor_pos.append((*left, band))
                     cv2.circle(bilateral_filt, left,
                                5, (255, 0, 255), -1)
                 else:
@@ -123,12 +122,12 @@ class Detect:
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
             x, y, w, h = self.resistors[i]["resistor"]
-            strVal = ""
+            resistor_val = ""
             if (len(bands) in [3, 4, 5]):
                 for band in bands[:-1]:
-                    strVal += str(band[3])
-                intVal = int(strVal)
-                intVal *= 10**bands[-1][3]
+                    resistor_val += str(band[-1].multiplier)
+                intVal = int(resistor_val)
+                intVal *= 10**bands[-1][-1].multiplier
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(frame, str(intVal) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
