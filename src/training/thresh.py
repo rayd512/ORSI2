@@ -48,16 +48,24 @@ while(1):
     bilateral_filt = cv2.bilateralFilter(frame, 5, 80, 80)
     hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
     # edge threshold filters out background and resistor body
-    thresh = cv2.adaptiveThreshold(cv2.cvtColor(
-        bilateral_filt, cv2.COLOR_BGR2GRAY), 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 59, 5)
+    thresh = cv2.adaptiveThreshold(
+        cv2.cvtColor(
+            bilateral_filt,
+            cv2.COLOR_BGR2GRAY),
+        255,
+        cv2.ADAPTIVE_THRESH_MEAN_C,
+        cv2.THRESH_BINARY,
+        59,
+        5)
     thresh = cv2.bitwise_not(thresh)
     mask = cv2.inRange(hsv, lower, upper)
     mask = cv2.bitwise_and(mask, thresh, mask=mask)
 
     # Print if there is a change in HSV value
     if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax)):
-        print("(hMin = %d , sMin = %d, vMin = %d), (hMax = %d , sMax = %d, vMax = %d)" % (
-            hMin, sMin, vMin, hMax, sMax, vMax))
+        print(
+            "(hMin = %d , sMin = %d, vMin = %d), (hMax = %d , sMax = %d, vMax = %d)" %
+            (hMin, sMin, vMin, hMax, sMax, vMax))
         phMin = hMin
         psMin = sMin
         pvMin = vMin
