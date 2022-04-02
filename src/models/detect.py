@@ -21,8 +21,9 @@ class Detect:
         ]
         self.RED_TOP_LOWER = (160, 30, 80)
         self.RED_TOP_UPPER = (179, 255, 200)
+        self._load_cascade()
 
-    def _load_cascade(self):
+    def _load_cascade(self) -> None:
         if not self.cascade.load(cv.samples.findFile(
                 "src/models/haarcascade_resistors_0.xml")):
             raise Exception("Could not load face cascade!")
