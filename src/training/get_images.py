@@ -33,10 +33,10 @@ def main():
                 sleep(randint(1, 3))
             try:
                 urllib.request.urlretrieve(url, path + str(pic_count) + ".png")
-                img = cv2.imread(path+str(pic_count)+".png",
+                img = cv2.imread(path + str(pic_count) + ".png",
                                  cv2.IMREAD_GRAYSCALE)
                 resized_image = cv2.resize(img, (640, 480))
-                cv2.imwrite(path+str(pic_count)+".png", resized_image)
+                cv2.imwrite(path + str(pic_count) + ".png", resized_image)
                 print("Image Added " + str(pic_count))
                 pic_count += 1
             except Exception as e:
