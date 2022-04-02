@@ -145,7 +145,7 @@ class Detect:
 
             if fallback_value:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
+                cv2.putText(frame, str(fallback_value) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
             else:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
