@@ -148,7 +148,7 @@ class Detect:
         left_most = None
         right_most = None
         for i in range(len(contours)):
-            if cv2.contourArea(contours[i]) < 30:
+            if cv2.contourArea(contours[i]) < 100:
                 continue
             left = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
             right = tuple(contours[i][contours[i][:, :, 0].argmax()][0])
@@ -161,7 +161,7 @@ class Detect:
             if right[0] > right_most[0]:
                 right_most = right
 
-        print(left_most, right_most)
+        print(right_most[0]-left_most[0])
         cv2.circle(bilateral_filt, left_most,
                    5, (255, 0, 255), -1)
         cv2.circle(bilateral_filt, right_most,
