@@ -134,14 +134,14 @@ class Detect:
             if (len(bands) in [3, 4, 5]):
                 for band in bands[:-1]:
                     resistor_val += str(band[-1].multiplier)
-                intVal = int(resistor_val)
-                intVal *= 10**bands[-1][-1].multiplier
+                resistor_val = int(resistor_val)
+                resistor_val *= 10**bands[-1][-1].multiplier
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                cv2.putText(frame, str(intVal) + " OHMS", (x + w + 10, y),
+                cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 continue
 
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-            cv2.putText(frame, str(intVal) + " OHMS", (x + w + 10, y),
+            cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
                         cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
         cv2.imshow("scanner", frame)
