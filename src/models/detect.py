@@ -156,7 +156,7 @@ class Detect:
                 right_most = right
             if left[0] < left_most[0]:
                 left_most = left
-            if right[0] < right_most[0]:
+            if right[0] > right_most[0]:
                 right_most = right
 
         print(left_most, right_most)
