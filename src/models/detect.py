@@ -93,10 +93,14 @@ class Detect:
                 if (self._valid_contour(contours[i])):
                     band_left = tuple(
                         contours[i][contours[i][:, :, 0].argmin()][0])
+                    found_close_band = False
                     for position in resistor_pos:
                         if abs(position[0] - band_left[0]) < self.HORIZ_MARG:
                             contours.pop(i)
-                            continue
+                            found_close_band = True
+                            break
+                    if found_close_band:
+                        continue
                     # resistor_pos += [band_left +
                     #                  (band.color, band.multiplier, band.draw_color)]
                     resistor_pos.append((*band_left, band))
