@@ -127,10 +127,31 @@ class Detect:
             return False
         return True
 
+    def _get_wattage(self, resistor_img) -> None:
+        lower_hsv = (0, 100, 0)
+        upper_hsv = (179, 255, 255)
+        resistor_img = cv2.resize(resistor_img, (400, 200))
+        bilateral_filt = cv2.bilateralFilter(resistor_img, 5, 80, 80)
+        hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv, lower_hsv, upper_hsv)
+        if (cv2.__version__ == "3.4.16"):
+            _, contours, hierarchy = cv2.findContours(
+                mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        else:
+            contours, hierarchy = cv2.findContours(
+                mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        for i in range(len(contours)):
+            cv2.drawContours(bilateral_filt, contours, i, (0, 255, 0),
+                             2, cv2.LINE_8, hierarchy, 0)
+        cv2.imshow("scanner", bilateral_filt)
+        while cv2.waitKey(10) & 0xFF != ord('n'):
+            pass
+
     def show_values(self, frame):
         fallback_value = None
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
+            wattage = self._get_wattage(self.resistors[i]["ROI"])
             x, y, w, h = self.resistors[i]["resistor"]
             resistor_val = ""
             if (len(bands) in [3, 4, 5]):
