@@ -45,9 +45,14 @@ while(1):
     upper = np.array([hMax, sMax, vMax])
     ret, frame = cap.read()
     # Convert to HSV format and color threshold
-    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    bilateral_filt = cv2.bilateralFilter(frame, 5, 80, 80)
+    hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
+    # edge threshold filters out background and resistor body
+    thresh = cv2.adaptiveThreshold(cv2.cvtColor(
+        bilateral_filt, cv2.COLOR_BGR2GRAY), 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 59, 5)
+    thresh = cv2.bitwise_not(thresh)
     mask = cv2.inRange(hsv, lower, upper)
-    result = cv2.bitwise_and(frame, frame, mask=mask)
+    mask = cv2.bitwise_and(mask, thresh, mask=mask)
 
     # Print if there is a change in HSV value
     if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax)):
