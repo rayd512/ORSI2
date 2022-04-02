@@ -155,7 +155,7 @@ class Detect:
             if not right_most:
                 right_most = right[0]
             right_most = max(right[0], right_most)
-            left_most = max(left[0], left_most)
+            left_most = min(left[0], left_most)
 
         print(left_most, right_most)
         cv2.circle(bilateral_filt, left_most,
