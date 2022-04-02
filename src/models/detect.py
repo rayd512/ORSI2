@@ -118,7 +118,8 @@ class Detect:
 
     def _valid_contour(self, contour):
         # looking for a large enough area and correct aspect ratio
-        if(cv2.contourArea(contour) < self.MIN_AREA):
+        area = cv2.contourArea(contour)
+        if(area < self.MIN_AREA):
             return False
         x, y, w, h = cv2.boundingRect(contour)
         aspectRatio = float(w) / h
@@ -137,10 +138,14 @@ class Detect:
                     resistor_val += str(band[-1].multiplier)
                 resistor_val = int(resistor_val)
                 resistor_val *= 10**bands[-1][-1].multiplier
+                self.resistors[i]["value"] = resistor_val
                 fallback_value = resistor_val
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                continue
+
+            if len(bands) == 0:
                 continue
 
             if fallback_value:

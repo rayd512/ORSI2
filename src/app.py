@@ -9,7 +9,7 @@ def on_click(event, x, y, flags, param):
     """
     Process clicks on start and end buttons
     """
-    global has_session, db, detect, frame
+    global has_session, db, detect
     bounding_box = Button.end_text if has_session else Button.start_text
     (text_w, text_h), _ = cv.getTextSize(bounding_box,
                                          Button.font, Button.font_size, Button.font_thickness)
@@ -24,7 +24,9 @@ def on_click(event, x, y, flags, param):
             has_session = not has_session
         elif x > Button.pos_scan[0] and x < Button.pos_scan[0] + scan_w + \
                 10 and y > Button.pos_scan[1] and y < Button.pos_scan[1] + scan_h + 10:
-            pass
+            for resistor in detect.resistors:
+                if "value" in resistor:
+                    db.add_resistor(resistor["value"], 100)
 
 
 # Keep state of buttons
@@ -32,19 +34,20 @@ has_session = False
 
 # Global access to db
 db = Database()
+detect = Detect()
 
 
 def main():
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     # Initialize the camera and grab a reference to the raw camera capture
+    global detect
     cap = cv.VideoCapture(0)
 
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
-    detect = Detect()
     start = time.time()
     while True:
         ret, frame = cap.read()
