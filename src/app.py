@@ -9,13 +9,13 @@ def on_click(event, x, y, flags, param):
     """
     Process clicks on start and end buttons
     """
-    global has_session, db, detect, frame
+    global has_session, db, detect
     bounding_box = Button.end_text if has_session else Button.start_text
     (text_w, text_h), _ = cv.getTextSize(bounding_box,
                                          Button.font, Button.font_size, Button.font_thickness)
     (scan_w, scan_h), _ = cv.getTextSize(Button.scan_text,
                                          Button.font, Button.font_size, Button.font_thickness)
-    # check if the click is within the dimensions of the button
+    # Check if the click is within the dimensions of the button
     if event == cv.EVENT_LBUTTONDOWN:
         if x > Button.pos[0] and x < Button.pos[0] + text_w + \
                 10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
@@ -24,7 +24,9 @@ def on_click(event, x, y, flags, param):
             has_session = not has_session
         elif x > Button.pos_scan[0] and x < Button.pos_scan[0] + scan_w + \
                 10 and y > Button.pos_scan[1] and y < Button.pos_scan[1] + scan_h + 10:
-            pass
+            for resistor in detect.resistors:
+                if "value" in resistor:
+                    db.add_resistor(resistor["value"], resistor["wattage"])
 
 
 # Keep state of buttons
@@ -32,24 +34,28 @@ has_session = False
 
 # Global access to db
 db = Database()
-frame = None
+detect = Detect()
 
 
 def main():
-    # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
-    # define a video capture object
+    global detect
     # Initialize the camera and grab a reference to the raw camera capture
-    global frame
     cap = cv.VideoCapture(0)
 
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty(
         "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
-    detect = Detect()
     start = time.time()
+
     while True:
         ret, frame = cap.read()
+
+        if time.time() - start > 1:
+            detect.detect(frame)
+            start = time.time()
+
+        detect.show_values(frame)
 
         # Draw start / end button
         if not has_session:
@@ -58,20 +64,11 @@ def main():
             Button.end(frame)
             Button.scan(frame)
 
-        if time.time() - start > 1:
-            detect.detect(frame)
-            start = time.time()
-        detect.show_values(frame)
-
-        # frame = detect.draw_ROI(frame)
-        # Display the resulting frame
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
 
-        # the 'q' button is set as the
-        # quitting button you may use any
-        # desired button of your choice
+        # Set q and ESC to quit program
         if cv.waitKey(10) & 0xFF == ord('q') or cv.waitKey(10) & 0xFF == 27:
             break
 

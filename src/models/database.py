@@ -36,7 +36,7 @@ class Database:
         new_doc.set(new_session_data)
         self.current_session = new_doc.id
 
-    def add_resistor(self, resistance: int, wattage: int) -> None:
+    def add_resistor(self, resistance: int, wattage: str) -> None:
         """
         Adds a new resistor to the current scanning session.
         Resistance to be provided in ohms

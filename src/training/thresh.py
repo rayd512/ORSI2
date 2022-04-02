@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 
 
 def nothing(x):
@@ -30,6 +31,7 @@ cv2.setTrackbarPos('VMax', 'image', 255)
 hMin = sMin = vMin = hMax = sMax = vMax = 0
 phMin = psMin = pvMin = phMax = psMax = pvMax = 0
 cap = cv2.VideoCapture(0)
+index = True
 
 while(1):
     # Get current positions of all trackbars
@@ -48,16 +50,24 @@ while(1):
     bilateral_filt = cv2.bilateralFilter(frame, 5, 80, 80)
     hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
     # edge threshold filters out background and resistor body
-    thresh = cv2.adaptiveThreshold(cv2.cvtColor(
-        bilateral_filt, cv2.COLOR_BGR2GRAY), 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 59, 5)
+    thresh = cv2.adaptiveThreshold(
+        cv2.cvtColor(
+            bilateral_filt,
+            cv2.COLOR_BGR2GRAY),
+        255,
+        cv2.ADAPTIVE_THRESH_MEAN_C,
+        cv2.THRESH_BINARY,
+        59,
+        5)
     thresh = cv2.bitwise_not(thresh)
     mask = cv2.inRange(hsv, lower, upper)
     mask = cv2.bitwise_and(mask, thresh, mask=mask)
 
     # Print if there is a change in HSV value
     if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax)):
-        print("(hMin = %d , sMin = %d, vMin = %d), (hMax = %d , sMax = %d, vMax = %d)" % (
-            hMin, sMin, vMin, hMax, sMax, vMax))
+        print(
+            "(hMin = %d , sMin = %d, vMin = %d), (hMax = %d , sMax = %d, vMax = %d)" %
+            (hMin, sMin, vMin, hMax, sMax, vMax))
         phMin = hMin
         psMin = sMin
         pvMin = vMin
@@ -66,8 +76,15 @@ while(1):
         pvMax = vMax
 
     # Display result image
-    cv2.imshow('image', frame)
+    if index:
+        cv2.imshow('image', mask)
+    else:
+        cv2.imshow('image', frame)
+
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
+
+    if cv2.waitKey(10) & 0xFF == ord('w'):
+        index = not index
 
 cv2.destroyAllWindows()
