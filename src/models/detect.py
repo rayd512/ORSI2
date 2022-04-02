@@ -6,12 +6,12 @@ class Detect:
     def __init__(self):
         self.cascade = cv2.CascadeClassifier()
         self.resistors = []
-        self.MIN_AREA = 700
+        self.MIN_AREA = 400
         self.COLOR_BOUNDS = [
             [(0, 0, 0), (179, 255, 2), "BLACK", 0, (0, 0, 0)],
             [(0, 104, 0), (11, 255, 46), "BROWN", 1, (0, 51, 102)],
-            [(0, 30, 50), (6, 255, 200), "RED", 2, (0, 0, 255)],
-            [(2, 235, 75), (121, 255, 225), "ORANGE", 3, (0, 128, 255)],
+            [(0, 220, 30), (179, 255, 100), "RED", 2, (0, 0, 255)],
+            [(4, 230, 75), (18, 255, 180), "ORANGE", 3, (0, 128, 255)],
             [(20, 200, 15), (30, 255, 185), "YELLOW", 4, (0, 255, 255)],
             [(35, 130, 0), (70, 255, 255), "GREEN", 5, (0, 255, 0)],
             [(100, 150, 0), (140, 255, 70), "BLUE", 6, (255, 0, 0)],
@@ -91,7 +91,10 @@ class Detect:
                 else:
                     contours.pop(k)
 
-            cv2.drawContours(bilateral_filt, contours, -1, color[-1], 3)
+            cv2.drawContours(bilateral_filt, contours, -1, (color[-1]), 3)
+        cv2.imshow("scanner", bilateral_filt)
+        while cv2.waitKey(10) & 0xFF != ord('n'):
+            pass
         return sorted(resistor_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
@@ -101,7 +104,8 @@ class Detect:
         else:
             x, y, w, h = cv2.boundingRect(contour)
             aspectRatio = float(w) / h
-            if (aspectRatio > 0.4):
+            print(aspectRatio)
+            if (aspectRatio > 1.5):
                 return False
         return True
 
