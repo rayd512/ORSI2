@@ -151,12 +151,17 @@ class Detect:
             left = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
             right = tuple(contours[i][contours[i][:, :, 0].argmax()][0])
             if not left_most:
-                left_most = left
+                left_most = left[0]
             if not right_most:
-                right_most = right
-            right_most = max(right, right_most)
-            left_most = max(left, left_most)
+                right_most = right[0]
+            right_most = max(right[0], right_most)
+            left_most = max(left[0], left_most)
+
         print(left_most, right_most)
+        cv2.circle(bilateral_filt, left_most,
+                   5, (255, 0, 255), -1)
+        cv2.circle(bilateral_filt, right_most,
+                   5, (255, 0, 255), -1)
         cv2.imshow("scanner", bilateral_filt)
         while cv2.waitKey(10) & 0xFF != ord('n'):
             pass
