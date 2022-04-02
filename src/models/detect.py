@@ -48,8 +48,15 @@ class Detect:
         bilateral_filt = cv2.bilateralFilter(resistor_img, 5, 80, 80)
         hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
         # edge threshold filters out background and resistor body
-        thresh = cv2.adaptiveThreshold(cv2.cvtColor(
-            bilateral_filt, cv2.COLOR_BGR2GRAY), 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 59, 5)
+        thresh = cv2.adaptiveThreshold(
+            cv2.cvtColor(
+                bilateral_filt,
+                cv2.COLOR_BGR2GRAY),
+            255,
+            cv2.ADAPTIVE_THRESH_MEAN_C,
+            cv2.THRESH_BINARY,
+            59,
+            5)
         thresh = cv2.bitwise_not(thresh)
 
         resistor_pos = []
@@ -71,7 +78,7 @@ class Detect:
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
             # filter invalid contours, store valid ones
-            for k in range(len(contours)-1, -1, -1):
+            for k in range(len(contours) - 1, -1, -1):
                 if (self._valid_contour(contours[k])):
                     left = tuple(
                         contours[k][contours[k][:, :, 0].argmin()][0])
@@ -90,7 +97,7 @@ class Detect:
             return False
         else:
             x, y, w, h = cv2.boundingRect(contour)
-            aspectRatio = float(w)/h
+            aspectRatio = float(w) / h
             if (aspectRatio > 0.4):
                 return False
         return True
@@ -105,10 +112,10 @@ class Detect:
                     strVal += str(band[3])
                 intVal = int(strVal)
                 intVal *= 10**bands[-1][3]
-                cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                cv2.putText(frame, str(intVal) + " OHMS", (x+w+10, y),
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(frame, str(intVal) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 continue
             # draw a red rectangle indicating an error reading the bands
-            cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 0, 255), 2)
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
         cv2.imshow("scanner", frame)
