@@ -28,6 +28,7 @@ class Detect:
         self.cascade = cv2.CascadeClassifier()
         self.resistors = []
         self.MIN_AREA = 400
+        self.HORIZ_MARG = 40
         self.BANDS = [self.Band(*band_param)
                       for band_param in self.Band.BAND_DEFAULTS]
         self._load_cascade()
@@ -69,6 +70,7 @@ class Detect:
         thresh = cv2.bitwise_not(thresh)
 
         resistor_pos = []
+        # invalid_contours = []
         for band in self.BANDS:
             mask = cv2.inRange(hsv, band.lower_hsv, band.upper_hsv)
 
@@ -87,17 +89,21 @@ class Detect:
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
                 contours = list(contours)
             # filter invalid contours, store valid ones
-            for k in range(len(contours) - 1, -1, -1):
-                if (self._valid_contour(contours[k])):
-                    left = tuple(
-                        contours[k][contours[k][:, :, 0].argmin()][0])
-                    # resistor_pos += [left +
+            for i in range(len(contours) - 1, -1, -1):
+                if (self._valid_contour(contours[i])):
+                    band_left = tuple(
+                        contours[i][contours[i][:, :, 0].argmin()][0])
+                    for position in resistor_pos:
+                        if abs(position[0] - band_left[0]) < self.HORIZ_MARG:
+                            contours.pop(i)
+                            continue
+                    # resistor_pos += [band_left +
                     #                  (band.color, band.multiplier, band.draw_color)]
-                    resistor_pos.append((*left, band))
-                    cv2.circle(bilateral_filt, left,
+                    resistor_pos.append((*band_left, band))
+                    cv2.circle(bilateral_filt, band_left,
                                5, (255, 0, 255), -1)
                 else:
-                    contours.pop(k)
+                    contours.pop(i)
 
             cv2.drawContours(bilateral_filt, contours, -
                              1, (band.draw_color), 3)
@@ -110,12 +116,11 @@ class Detect:
         # looking for a large enough area and correct aspect ratio
         if(cv2.contourArea(contour) < self.MIN_AREA):
             return False
-        else:
-            x, y, w, h = cv2.boundingRect(contour)
-            aspectRatio = float(w) / h
-            print(aspectRatio)
-            if (aspectRatio > 1.5):
-                return False
+        x, y, w, h = cv2.boundingRect(contour)
+        aspectRatio = float(w) / h
+        print(aspectRatio)
+        if (aspectRatio > 1.5):
+            return False
         return True
 
     def show_values(self, frame):
