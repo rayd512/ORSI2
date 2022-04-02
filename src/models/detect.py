@@ -8,10 +8,10 @@ class Detect:
         self.resistors = []
         self.MIN_AREA = 700
         self.COLOR_BOUNDS = [
-            [(0, 0, 0), (179, 255, 93), "BLACK", 0, (0, 0, 0)],
-            [(0, 90, 10), (15, 250, 100), "BROWN", 1, (0, 51, 102)],
-            [(0, 30, 80), (10, 255, 200), "RED", 2, (0, 0, 255)],
-            [(10, 70, 70), (25, 255, 200), "ORANGE", 3, (0, 128, 255)],
+            [(0, 0, 0), (179, 255, 10), "BLACK", 0, (0, 0, 0)],
+            [(0, 104, 0), (11, 255, 46), "BROWN", 1, (0, 51, 102)],
+            [(0, 30, 50), (6, 255, 200), "RED", 2, (0, 0, 255)],
+            [(2, 235, 68), (121, 255, 225), "ORANGE", 3, (0, 128, 255)],
             [(30, 170, 100), (40, 250, 255), "YELLOW", 4, (0, 255, 255)],
             [(35, 20, 110), (60, 45, 120), "GREEN", 5, (0, 255, 0)],
             [(65, 0, 85), (115, 30, 147), "BLUE", 6, (255, 0, 0)],
@@ -67,8 +67,13 @@ class Detect:
             print(color[2])
             while cv.waitKey(10) & 0xFF != ord('n'):
                 pass
-            contours, hierarchy = cv.findContours(
-                mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+            if (cv2.__version__ == "3.4.16"):
+                _, contours, hierarchy = cv.findContours(
+                    mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+                contours = list(contours)
+            else:
+                contours, hierarchy = cv.findContours(
+                    mask, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
 
             # filter invalid contours, store valid ones
             for k in range(len(contours)-1, -1, -1):

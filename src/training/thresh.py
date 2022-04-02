@@ -66,7 +66,7 @@ while(1):
         pvMax = vMax
 
     # Display result image
-    cv2.imshow('image', frame)
+    cv2.imshow('image', mask)
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
 
