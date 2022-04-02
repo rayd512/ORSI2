@@ -140,6 +140,8 @@ class Detect:
                 cv2.putText(frame, str(intVal) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 continue
-            # draw a red rectangle indicating an error reading the bands
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            cv2.putText(frame, str(intVal) + " OHMS", (x + w + 10, y),
+                        cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
         cv2.imshow("scanner", frame)
