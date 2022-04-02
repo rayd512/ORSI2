@@ -91,7 +91,8 @@ class Detect:
                 if (self._valid_contour(contours[k])):
                     left = tuple(
                         contours[k][contours[k][:, :, 0].argmin()][0])
-                    resistor_pos += [left + (band.multiplier, band.color)]
+                    resistor_pos += [left +
+                                     (band.color, band.multiplier, band.draw_color)]
                     cv2.circle(bilateral_filt, left,
                                5, (255, 0, 255), -1)
                 else:
