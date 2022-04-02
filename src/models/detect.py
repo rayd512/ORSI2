@@ -3,11 +3,8 @@ import cv2
 
 
 class Detect:
-    def __init__(self):
-        self.cascade = cv2.CascadeClassifier()
-        self.resistors = []
-        self.MIN_AREA = 400
-        self.COLOR_BOUNDS = [
+    class Band:
+        BAND_DEFAULTS = [
             [(0, 0, 0), (179, 255, 2), "BLACK", 0, (0, 0, 0)],
             [(0, 104, 0), (11, 255, 46), "BROWN", 1, (0, 51, 102)],
             [(0, 220, 30), (179, 255, 100), "RED", 2, (0, 0, 255)],
@@ -19,8 +16,20 @@ class Detect:
             [(0, 20, 0), (179, 180, 60), "GRAY", 8, (128, 128, 128)],
             [(0, 0, 90), (179, 15, 250), "WHITE", 9, (255, 255, 255)],
         ]
-        self.RED_TOP_LOWER = (160, 30, 80)
-        self.RED_TOP_UPPER = (179, 255, 200)
+
+        def __init__(self, lower_hsv, upper_hsv, color, multiplier, draw_color) -> None:
+            self.lower_hsv = lower_hsv
+            self.upper_hsv = upper_hsv
+            self.color = color
+            self.multiplier = multiplier
+            self.draw_color = draw_color
+
+    def __init__(self):
+        self.cascade = cv2.CascadeClassifier()
+        self.resistors = []
+        self.MIN_AREA = 400
+        self.BANDS = [self.Band(*band_param)
+                      for band_param in self.Band.BAND_DEFAULTS]
         self._load_cascade()
 
     def _load_cascade(self) -> None:
@@ -60,18 +69,15 @@ class Detect:
         thresh = cv2.bitwise_not(thresh)
 
         resistor_pos = []
-        for color in self.COLOR_BOUNDS:
-            mask = cv2.inRange(hsv, color[0], color[1])
-            if (color[2] == "RED"):  # combining the 2 RED ranges in hsv
-                redMask2 = cv2.inRange(
-                    hsv, self.RED_TOP_LOWER, self.RED_TOP_UPPER)
-                mask = cv2.bitwise_or(redMask2, mask, mask)
+        for band in self.BANDS:
+            mask = cv2.inRange(hsv, band.lower_hsv, band.upper_hsv)
 
-            mask = cv2.bitwise_and(mask, thresh, mask=mask)
-            cv2.imshow("scanner", mask)
-            print(color[2])
-            while cv2.waitKey(10) & 0xFF != ord('n'):
-                pass
+            # mask = cv2.bitwise_and(mask, thresh, mask=mask)
+            # cv2.imshow("scanner", mask)
+            # print(band.color)
+
+            # while cv2.waitKey(10) & 0xFF != ord('n'):
+            #     pass
             if (cv2.__version__ == "3.4.16"):
                 _, contours, hierarchy = cv2.findContours(
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -79,22 +85,23 @@ class Detect:
             else:
                 contours, hierarchy = cv2.findContours(
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-
+                contours = list(contours)
             # filter invalid contours, store valid ones
             for k in range(len(contours) - 1, -1, -1):
                 if (self._valid_contour(contours[k])):
                     left = tuple(
                         contours[k][contours[k][:, :, 0].argmin()][0])
-                    resistor_pos += [left + tuple(color[2:])]
+                    resistor_pos += [left + (band.multiplier, band.color)]
                     cv2.circle(bilateral_filt, left,
                                5, (255, 0, 255), -1)
                 else:
                     contours.pop(k)
 
-            cv2.drawContours(bilateral_filt, contours, -1, (color[-1]), 3)
-        cv2.imshow("scanner", bilateral_filt)
-        while cv2.waitKey(10) & 0xFF != ord('n'):
-            pass
+            cv2.drawContours(bilateral_filt, contours, -
+                             1, (band.draw_color), 3)
+        # cv2.imshow("scanner", bilateral_filt)
+        # while cv2.waitKey(10) & 0xFF != ord('n'):
+        #     pass
         return sorted(resistor_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
