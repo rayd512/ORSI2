@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import time
 
+
 def nothing(x):
     pass
 
@@ -79,7 +80,7 @@ while(1):
         cv2.imshow('image', mask)
     else:
         cv2.imshow('image', frame)
-    
+
     if cv2.waitKey(10) & 0xFF == ord('q'):
         break
 

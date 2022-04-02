@@ -8,7 +8,8 @@ import imutils
 class Detect:
     # Inner class used to store data on bands that could exist on resistor
     class Band:
-        # Default values for resistor band color ranges, multipliers and draw color
+        # Default values for resistor band color ranges, multipliers and draw
+        # color
         BAND_DEFAULTS = [
             [(0, 0, 0), (179, 255, 2), "BLACK", 0, (0, 0, 0)],
             [(0, 104, 0), (5, 255, 46), "BROWN", 1, (0, 51, 102)],
@@ -22,7 +23,13 @@ class Detect:
             [(0, 0, 90), (179, 15, 250), "WHITE", 9, (255, 255, 255)],
         ]
 
-        def __init__(self, lower_hsv, upper_hsv, color, multiplier, draw_color) -> None:
+        def __init__(
+                self,
+                lower_hsv,
+                upper_hsv,
+                color,
+                multiplier,
+                draw_color) -> None:
             self.lower_hsv = lower_hsv
             self.upper_hsv = upper_hsv
             self.color = color
@@ -72,7 +79,7 @@ class Detect:
     def _find_bands(self, resistor_img: List[int]) -> None:
         """
         Finds bands on an ROI of a resistor
-        :param List[int] resistor_img cropped version of 
+        :param List[int] resistor_img cropped version of
         current frame containing only the current resistor
         """
 
@@ -102,7 +109,8 @@ class Detect:
                     band_left = tuple(
                         contours[i][contours[i][:, :, 0].argmin()][0])
 
-                    # Check if we have a contour that is in the same vertical plane
+                    # Check if we have a contour that is in the same vertical
+                    # plane
                     found_close_band = False
                     for position in band_pos:
                         if abs(position[0] - band_left[0]) < self.HORIZ_MARG:
@@ -146,7 +154,7 @@ class Detect:
     def _get_wattage(self, resistor_img: List[int]) -> Union[int, None]:
         """
         Determines the wattage of the current resistor
-        :param List[int] resistor_img cropped version of 
+        :param List[int] resistor_img cropped version of
         current frame containing only the current resistor
         """
 
@@ -203,7 +211,7 @@ class Detect:
         #     pass
 
         # Determine resistor wattage by pixel length
-        resistor_length = right_most[0]-left_most[0]
+        resistor_length = right_most[0] - left_most[0]
         for length, wattage in WATTAGES.items():
             if resistor_length < length + 10 and resistor_length > length - 10:
                 return wattage
@@ -237,8 +245,21 @@ class Detect:
 
                 # Display resistor value
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
-                            cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(
+                    frame,
+                    str(resistor_val) +
+                    " OHMS",
+                    (x +
+                     w +
+                     10,
+                     y),
+                    cv2.FONT_HERSHEY_PLAIN,
+                    1,
+                    (255,
+                     255,
+                     255),
+                    2,
+                    cv2.LINE_AA)
                 continue
 
             if len(bands) == 0:
@@ -247,8 +268,21 @@ class Detect:
             # Display value of other resistors if not able to calculate self
             if fallback_value:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                cv2.putText(frame, str(fallback_value) + " OHMS", (x + w + 10, y),
-                            cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                cv2.putText(
+                    frame,
+                    str(fallback_value) +
+                    " OHMS",
+                    (x +
+                     w +
+                     10,
+                     y),
+                    cv2.FONT_HERSHEY_PLAIN,
+                    1,
+                    (255,
+                     255,
+                     255),
+                    2,
+                    cv2.LINE_AA)
             else:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
