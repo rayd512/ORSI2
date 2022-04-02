@@ -29,6 +29,7 @@ cv2.setTrackbarPos('VMax', 'image', 255)
 # Initialize HSV min/max values
 hMin = sMin = vMin = hMax = sMax = vMax = 0
 phMin = psMin = pvMin = phMax = psMax = pvMax = 0
+cap = cv2.VideoCapture(0)
 
 while(1):
     # Get current positions of all trackbars
@@ -42,11 +43,11 @@ while(1):
     # Set minimum and maximum HSV values to display
     lower = np.array([hMin, sMin, vMin])
     upper = np.array([hMax, sMax, vMax])
-
+    ret, frame = cap.read()
     # Convert to HSV format and color threshold
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
     mask = cv2.inRange(hsv, lower, upper)
-    result = cv2.bitwise_and(image, image, mask=mask)
+    result = cv2.bitwise_and(frame, frame, mask=mask)
 
     # Print if there is a change in HSV value
     if((phMin != hMin) | (psMin != sMin) | (pvMin != vMin) | (phMax != hMax) | (psMax != sMax) | (pvMax != vMax)):
