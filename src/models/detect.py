@@ -1,10 +1,14 @@
-from typing import List
+from typing import List, Union
 import cv2
 import imutils
 
+# Used to detect resistors and determine it's wattage and values
+
 
 class Detect:
+    # Inner class used to store data on bands that could exist on resistor
     class Band:
+        # Default values for resistor band color ranges, multipliers and draw color
         BAND_DEFAULTS = [
             [(0, 0, 0), (179, 255, 2), "BLACK", 0, (0, 0, 0)],
             [(0, 104, 0), (5, 255, 46), "BROWN", 1, (0, 51, 102)],
@@ -35,11 +39,18 @@ class Detect:
         self._load_cascade()
 
     def _load_cascade(self) -> None:
+        """
+        Loads the machine learning model
+        """
         if not self.cascade.load(cv2.samples.findFile(
                 "src/models/haarcascade_resistors_0.xml")):
             raise Exception("Could not load face cascade!")
 
     def detect(self, frame: List[int]) -> None:
+        """
+        Detects resistors in the current frame
+        :param List[int] frame the current frame from opencv video capture
+        """
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         self.resistors = []
@@ -49,38 +60,32 @@ class Detect:
                 {"resistor": resistors[i], "ROI": frame[y:y + h, x:x + w].copy()})
 
     def draw_ROI(self, frame: List[int]) -> List[int]:
+        """
+        Draws a bounding box on a detected resistor
+        :param List[int] frame the current frame from opencv video capture
+        """
         for (x, y, w, h) in self.resistors:
             frame = cv2.rectangle(
                 frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
         return frame
 
-    def _find_bands(self, resistor_img) -> None:
+    def _find_bands(self, resistor_img: List[int]) -> None:
+        """
+        Finds bands on an ROI of a resistor
+        :param List[int] resistor_img cropped version of 
+        current frame containing only the current resistor
+        """
+
         resistor_img = cv2.resize(resistor_img, (400, 200))
         bilateral_filt = cv2.bilateralFilter(resistor_img, 5, 80, 80)
         hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
-        # edge threshold filters out background and resistor body
-        thresh = cv2.adaptiveThreshold(
-            cv2.cvtColor(
-                bilateral_filt,
-                cv2.COLOR_BGR2GRAY),
-            255,
-            cv2.ADAPTIVE_THRESH_MEAN_C,
-            cv2.THRESH_BINARY,
-            59,
-            5)
-        thresh = cv2.bitwise_not(thresh)
 
-        resistor_pos = []
-        # invalid_contours = []
+        band_pos = []
+
+        # Mask out for each color and check for contours
         for band in self.BANDS:
             mask = cv2.inRange(hsv, band.lower_hsv, band.upper_hsv)
 
-            # mask = cv2.bitwise_and(mask, thresh, mask=mask)
-            # cv2.imshow("scanner", mask)
-            # print(band.color)
-
-            # while cv2.waitKey(10) & 0xFF != ord('n'):
-            #     pass
             if (cv2.__version__ == "3.4.16"):
                 _, contours, hierarchy = cv2.findContours(
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -89,36 +94,46 @@ class Detect:
                 contours, hierarchy = cv2.findContours(
                     mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
                 contours = list(contours)
-            # filter invalid contours, store valid ones
+
+            # Discard or store contours
             for i in range(len(contours) - 1, -1, -1):
                 if (self._valid_contour(contours[i])):
+                    # Find the left most portion of the contour
                     band_left = tuple(
                         contours[i][contours[i][:, :, 0].argmin()][0])
+
+                    # Check if we have a contour that is in the same vertical plane
                     found_close_band = False
-                    for position in resistor_pos:
+                    for position in band_pos:
                         if abs(position[0] - band_left[0]) < self.HORIZ_MARG:
                             contours.pop(i)
                             found_close_band = True
                             break
                     if found_close_band:
                         continue
-                    # resistor_pos += [band_left +
-                    #                  (band.color, band.multiplier, band.draw_color)]
-                    resistor_pos.append((*band_left, band))
+
+                    # Store the position of the band and it's information
+                    band_pos.append((*band_left, band))
+
+                    # Draw a circle for debugging
                     cv2.circle(bilateral_filt, band_left,
                                5, (255, 0, 255), -1)
                 else:
                     contours.pop(i)
 
-            cv2.drawContours(bilateral_filt, contours, -
-                             1, (band.draw_color), 3)
+            # Used to show detected contours when debugging
+            # cv2.drawContours(bilateral_filt, contours, -
+            #                  1, (band.draw_color), 3)
         # cv2.imshow("scanner", bilateral_filt)
         # while cv2.waitKey(10) & 0xFF != ord('n'):
         #     pass
-        return sorted(resistor_pos, key=lambda contour: contour[0])
+        return sorted(band_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
-        # looking for a large enough area and correct aspect ratio
+        """
+        Filter out any false positive contours by checkings its area and aspect ratio
+        :param contour the contour to check validity on
+        """
         area = cv2.contourArea(contour)
         if(area < self.MIN_AREA):
             return False
@@ -128,9 +143,19 @@ class Detect:
             return False
         return True
 
-    def _get_wattage(self, resistor_img) -> None:
+    def _get_wattage(self, resistor_img: List[int]) -> Union[int, None]:
+        """
+        Determines the wattage of the current resistor
+        :param List[int] resistor_img cropped version of 
+        current frame containing only the current resistor
+        """
+
+        # Default detection values
+        WATTAGES = {340: 0.125}
         lower_hsv = (0, 100, 0)
         upper_hsv = (179, 255, 255)
+
+        # Mask off to isolate the resistor body
         resistor_img = cv2.resize(resistor_img, (400, 200))
         bilateral_filt = cv2.bilateralFilter(resistor_img, 5, 80, 80)
         hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
@@ -142,12 +167,16 @@ class Detect:
             contours, hierarchy = cv2.findContours(
                 mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+        # Used for debugging, show the contours found
         for i in range(len(contours)):
             cv2.drawContours(bilateral_filt, contours, i, (0, 255, 0),
                              2, cv2.LINE_8, hierarchy, 0)
+
+        # Determine the leftmost and rightmost points
         left_most = None
         right_most = None
         for i in range(len(contours)):
+            # Filter out small contours
             if cv2.contourArea(contours[i]) < 100:
                 continue
             left = tuple(contours[i][contours[i][:, :, 0].argmin()][0])
@@ -160,23 +189,44 @@ class Detect:
                 left_most = left
             if right[0] > right_most[0]:
                 right_most = right
+        if not (right_most or left_most):
+            return 0
 
-        print(right_most[0]-left_most[0])
-        cv2.circle(bilateral_filt, left_most,
-                   5, (255, 0, 255), -1)
-        cv2.circle(bilateral_filt, right_most,
-                   5, (255, 0, 255), -1)
-        cv2.imshow("scanner", bilateral_filt)
-        while cv2.waitKey(10) & 0xFF != ord('n'):
-            pass
+        # Debug output
+        # print(right_most[0]-left_most[0])
+        # cv2.circle(bilateral_filt, left_most,
+        #            5, (255, 0, 255), -1)
+        # cv2.circle(bilateral_filt, right_most,
+        #            5, (255, 0, 255), -1)
+        # cv2.imshow("scanner", bilateral_filt)
+        # while cv2.waitKey(10) & 0xFF != ord('n'):
+        #     pass
 
-    def show_values(self, frame):
+        # Determine resistor wattage by pixel length
+        resistor_length = right_most[0]-left_most[0]
+        for length, wattage in WATTAGES.items():
+            if resistor_length < length + 10 and resistor_length > length - 10:
+                return wattage
+        return 0
+
+    def show_values(self, frame: List[int]) -> None:
+        """
+        Determines the wattage and value of detected resistors and displays them on screen
+        :param List[int] frame the current frame from opencv video capture
+        """
+
+        # Assuming all resistors on screen are same value, use value of other
+        # detected resistors if not able to calculate
         fallback_value = None
+
+        # Loop through detected resistors
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
             wattage = self._get_wattage(self.resistors[i]["ROI"])
+            self.resistors[i]["wattage"] = wattage
             x, y, w, h = self.resistors[i]["resistor"]
             resistor_val = ""
+
             if (len(bands) in [3, 4, 5]):
                 for band in bands[:-1]:
                     resistor_val += str(band[-1].multiplier)
@@ -184,6 +234,8 @@ class Detect:
                 resistor_val *= 10**bands[-1][-1].multiplier
                 self.resistors[i]["value"] = resistor_val
                 fallback_value = resistor_val
+
+                # Display resistor value
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(frame, str(resistor_val) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
@@ -192,10 +244,13 @@ class Detect:
             if len(bands) == 0:
                 continue
 
+            # Display value of other resistors if not able to calculate self
             if fallback_value:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(frame, str(fallback_value) + " OHMS", (x + w + 10, y),
                             cv2.FONT_HERSHEY_PLAIN, 1, (255, 255, 255), 2, cv2.LINE_AA)
             else:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+        # Show frame with detected calculations
         cv2.imshow("scanner", frame)
