@@ -32,14 +32,12 @@ has_session = False
 
 # Global access to db
 db = Database()
-frame = None
 
 
 def main():
     # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
     # define a video capture object
     # Initialize the camera and grab a reference to the raw camera capture
-    global frame
     cap = cv.VideoCapture(0)
 
     # Change to fullscreen
@@ -63,8 +61,6 @@ def main():
             start = time.time()
         detect.show_values(frame)
 
-        # frame = detect.draw_ROI(frame)
-        # Display the resulting frame
         cv.imshow("scanner", frame)
 
         cv.setMouseCallback("scanner", on_click)
