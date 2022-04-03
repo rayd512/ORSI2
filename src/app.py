@@ -15,7 +15,7 @@ def on_click(event, x, y, flags, param):
                                          Button.font, Button.font_size, Button.font_thickness)
     (scan_w, scan_h), _ = cv.getTextSize(Button.scan_text,
                                          Button.font, Button.font_size, Button.font_thickness)
-    # check if the click is within the dimensions of the button
+    # Check if the click is within the dimensions of the button
     if event == cv.EVENT_LBUTTONDOWN:
         if x > Button.pos[0] and x < Button.pos[0] + text_w + \
                 10 and y > Button.pos[1] and y < Button.pos[1] + text_h + 10:
@@ -44,9 +44,10 @@ def main():
 
     # Change to fullscreen
     cv.namedWindow("scanner", cv.WND_PROP_FULLSCREEN)
-    # cv.setWindowProperty(
-    #     "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
+    cv.setWindowProperty(
+        "scanner", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
     start = time.time()
+
     while True:
         ret, frame = cap.read()
 
@@ -67,9 +68,7 @@ def main():
 
         cv.setMouseCallback("scanner", on_click)
 
-        # the 'q' button is set as the
-        # quitting button you may use any
-        # desired button of your choice
+        # Set q and ESC to quit program
         if cv.waitKey(10) & 0xFF == ord('q') or cv.waitKey(10) & 0xFF == 27:
             break
 

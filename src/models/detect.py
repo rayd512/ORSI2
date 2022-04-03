@@ -92,20 +92,9 @@ class Detect:
         for band in self.BANDS:
             mask = cv2.inRange(hsv, band.lower_hsv, band.upper_hsv)
 
-            # Useful for tuning color ranges
-            # cv2.imshow("scanner", mask)
-            # print(band.color)
-            # while cv2.waitKey(10) & 0xFF != ord('n'):
-            #     pass
-
-            if (cv2.__version__ == "3.4.16"):
-                _, contours, hierarchy = cv2.findContours(
-                    mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-                contours = list(contours)
-            else:
-                contours, hierarchy = cv2.findContours(
-                    mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-                contours = list(contours)
+            contours, hierarchy = cv2.findContours(
+                mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+            contours = list(contours)
 
             # Discard or store contours
             for i in range(len(contours) - 1, -1, -1):
@@ -134,12 +123,6 @@ class Detect:
                 else:
                     contours.pop(i)
 
-            # Used to show detected contours when debugging
-            # cv2.drawContours(bilateral_filt, contours, -
-            #                  1, (band.draw_color), 3)
-        # cv2.imshow("scanner", bilateral_filt)
-        # while cv2.waitKey(10) & 0xFF != ord('n'):
-        #     pass
         return sorted(band_pos, key=lambda contour: contour[0])
 
     def _valid_contour(self, contour):
@@ -205,16 +188,6 @@ class Detect:
         if not (right_most or left_most):
             return 0
 
-        # Debug output
-        # print(right_most[0]-left_most[0])
-        # cv2.circle(bilateral_filt, left_most,
-        #            5, (255, 0, 255), -1)
-        # cv2.circle(bilateral_filt, right_most,
-        #            5, (255, 0, 255), -1)
-        # cv2.imshow("scanner", bilateral_filt)
-        # while cv2.waitKey(10) & 0xFF != ord('n'):
-        #     pass
-
         # Determine resistor wattage by pixel length
         resistor_length = right_most[0] - left_most[0]
         for length, wattage in WATTAGES.items():
@@ -232,6 +205,7 @@ class Detect:
         # detected resistors if not able to calculate
         fallback_value = None
 
+        # Find wattage of one resistor and assign it to all detected resistors
         wattage = self._get_wattage(frame)
 
         # Loop through detected resistors
