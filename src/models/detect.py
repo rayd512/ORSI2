@@ -149,7 +149,7 @@ class Detect:
             return False
         return True
 
-    def _get_wattage(self, resistor_img: List[int]) -> Union[int, None]:
+    def _get_wattage(self, frame: List[int]) -> Union[int, None]:
         """
         Determines the wattage of the current resistor
         :param List[int] resistor_img cropped version of
@@ -157,13 +157,13 @@ class Detect:
         """
 
         # Default detection values
-        WATTAGES = {340: 0.125}
+        WATTAGES = {325: 0.125}
         lower_hsv = (0, 100, 0)
         upper_hsv = (179, 255, 255)
 
         # Mask off to isolate the resistor body
-        resistor_img = cv2.resize(resistor_img, (400, 200))
-        bilateral_filt = cv2.bilateralFilter(resistor_img, 5, 80, 80)
+        frame = cv2.resize(frame, (400, 200))
+        bilateral_filt = cv2.bilateralFilter(frame, 5, 80, 80)
         hsv = cv2.cvtColor(bilateral_filt, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, lower_hsv, upper_hsv)
         if (cv2.__version__ == "3.4.16"):
@@ -225,11 +225,13 @@ class Detect:
         # detected resistors if not able to calculate
         fallback_value = None
 
+        self._get_wattage(self.resistors[i]["ROI"])
+
         # Loop through detected resistors
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
-            wattage = self._get_wattage(self.resistors[i]["ROI"])
-            self.resistors[i]["wattage"] = wattage
+            # wattage = self._get_wattage(self.resistors[i]["ROI"])
+            # self.resistors[i]["wattage"] = wattage
             x, y, w, h = self.resistors[i]["resistor"]
             resistor_val = ""
 
