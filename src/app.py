@@ -52,6 +52,8 @@ def main():
     while True:
         ret, frame = cap.read()
 
+        detect.show_values(frame)
+
         # Draw start / end button
         if not has_session:
             Button.start(frame)
@@ -62,7 +64,6 @@ def main():
         if time.time() - start > 1:
             detect.detect(frame)
             start = time.time()
-        detect.show_values(frame)
 
         cv.imshow("scanner", frame)
 
