@@ -215,6 +215,7 @@ class Detect:
 
         # Loop through detected resistors
         for i in range(len(self.resistors)):
+            x, y, w, h = self.resistors[i]["resistor"]
             frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
             continue
             bands = self._find_bands(self.resistors[i]["ROI"])
