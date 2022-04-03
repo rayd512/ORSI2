@@ -230,7 +230,6 @@ class Detect:
         # Loop through detected resistors
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
-            # wattage = self._get_wattage(self.resistors[i]["ROI"])
             self.resistors[i]["wattage"] = wattage
             x, y, w, h = self.resistors[i]["resistor"]
             resistor_val = ""

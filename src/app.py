@@ -26,7 +26,7 @@ def on_click(event, x, y, flags, param):
                 10 and y > Button.pos_scan[1] and y < Button.pos_scan[1] + scan_h + 10:
             for resistor in detect.resistors:
                 if "value" in resistor:
-                    db.add_resistor(resistor["value"], 100)
+                    db.add_resistor(resistor["value"], resistor["wattage"])
 
 
 # Keep state of buttons
