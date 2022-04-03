@@ -10,5 +10,5 @@ google-crc32c
 google-resumable-media
 googleapis-common-protos
 mock-firestore
-
+opencv-python
 
