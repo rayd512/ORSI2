@@ -255,9 +255,9 @@ class Detect:
                      y),
                     cv2.FONT_HERSHEY_PLAIN,
                     1,
-                    (255,
-                     255,
-                     255),
+                    (0,
+                     0,
+                     0),
                     2,
                     cv2.LINE_AA)
                 continue
@@ -278,9 +278,9 @@ class Detect:
                      y),
                     cv2.FONT_HERSHEY_PLAIN,
                     1,
-                    (255,
-                     255,
-                     255),
+                    (0,
+                     0,
+                     0),
                     2,
                     cv2.LINE_AA)
             else:
