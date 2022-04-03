@@ -225,7 +225,7 @@ class Detect:
         # detected resistors if not able to calculate
         fallback_value = None
 
-        self._get_wattage(self.resistors[i]["ROI"])
+        self._get_wattage(frame)
 
         # Loop through detected resistors
         for i in range(len(self.resistors)):
