@@ -41,6 +41,7 @@ class Detect:
         self.resistors = []
         self.MIN_AREA = 400
         self.HORIZ_MARG = 40
+        self.wattage = None
         self.BANDS = [self.Band(*band_param)
                       for band_param in self.Band.BAND_DEFAULTS]
         self._load_cascade()
@@ -61,6 +62,7 @@ class Detect:
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         self.resistors = []
+        self.wattage = None
         resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
         for i, (x, y, w, h) in enumerate(resistors):
             self.resistors.append(
@@ -207,12 +209,15 @@ class Detect:
         fallback_value = None
 
         # Find wattage of one resistor and assign it to all detected resistors
-        wattage = self._get_wattage(frame)
+        if not self.wattage:
+            self.wattage = self._get_wattage(frame)
 
         # Loop through detected resistors
         for i in range(len(self.resistors)):
+            if "value" in self.resistors[i]:
+                continue
             bands = self._find_bands(self.resistors[i]["ROI"])
-            self.resistors[i]["wattage"] = wattage
+            self.resistors[i]["wattage"] = self.wattage
             x, y, w, h = self.resistors[i]["resistor"]
             resistor_val = ""
 
@@ -228,7 +233,7 @@ class Detect:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(
                     frame,
-                    f'{resistor_val} OHMS, {wattage} W',
+                    f'{resistor_val} OHMS, {self.wattage} W',
                     (x +
                      w +
                      10,
@@ -250,7 +255,7 @@ class Detect:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(
                     frame,
-                    f'{resistor_val} OHMS, {wattage} W',
+                    f'{resistor_val} OHMS, {self.wattage} W',
                     (x +
                      w +
                      10,
