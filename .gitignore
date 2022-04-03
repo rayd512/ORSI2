@@ -153,3 +153,4 @@ cython_debug/
 
 # Firebase admin json
 src/models/resistoridenti-firebase-adminsdk-xvtyk-69bf8f9d5c.json
+src/training/492_positives
