@@ -15,8 +15,8 @@ class Detect:
             [(5, 165, 75), (15, 255, 180), "ORANGE", 3, (0, 128, 255)],
             [(22, 200, 15), (30, 255, 185), "YELLOW", 4, (0, 255, 255)],
             [(35, 130, 0), (70, 255, 255), "GREEN", 5, (0, 255, 0)],
-            [(100, 150, 0), (140, 255, 35), "BLUE", 6, (255, 0, 0)],
-            [(40, 100, 20), (179, 255, 255), "PURPLE", 7, (255, 0, 127)],
+            [(100, 150, 0), (120, 255, 35), "BLUE", 6, (255, 0, 0)],
+            [(122, 100, 20), (179, 255, 255), "PURPLE", 7, (255, 0, 127)],
             [(0, 20, 0), (179, 180, 60), "GRAY", 8, (128, 128, 128)],
             [(0, 0, 90), (179, 15, 250), "WHITE", 9, (255, 255, 255)],
         ]
@@ -90,6 +90,12 @@ class Detect:
         # Mask out for each color and check for contours
         for band in self.BANDS:
             mask = cv2.inRange(hsv, band.lower_hsv, band.upper_hsv)
+
+            # Useful for tuning color ranges
+            # cv2.imshow("scanner", mask)
+            # print(band.color)
+            # while cv2.waitKey(10) & 0xFF != ord('n'):
+            #     pass
 
             if (cv2.__version__ == "3.4.16"):
                 _, contours, hierarchy = cv2.findContours(
