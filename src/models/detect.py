@@ -217,7 +217,7 @@ class Detect:
         # Determine resistor wattage by pixel length
         resistor_length = right_most[0] - left_most[0]
         for length, wattage in WATTAGES.items():
-            if resistor_length < length + 10 and resistor_length > length - 10:
+            if resistor_length < length + 15 and resistor_length > length - 15:
                 return wattage
         return 0
 
