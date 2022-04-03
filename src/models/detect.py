@@ -1,10 +1,8 @@
 from typing import List, Union
 import cv2
-import imutils
+
 
 # Used to detect resistors and determine it's wattage and values
-
-
 class Detect:
     # Inner class used to store data on bands that could exist on resistor
     class Band:
@@ -202,13 +200,13 @@ class Detect:
 
         # Debug output
         # print(right_most[0]-left_most[0])
-        # cv2.circle(bilateral_filt, left_most,
-        #            5, (255, 0, 255), -1)
-        # cv2.circle(bilateral_filt, right_most,
-        #            5, (255, 0, 255), -1)
-        # cv2.imshow("scanner", bilateral_filt)
-        # while cv2.waitKey(10) & 0xFF != ord('n'):
-        #     pass
+        cv2.circle(bilateral_filt, left_most,
+                   5, (255, 0, 255), -1)
+        cv2.circle(bilateral_filt, right_most,
+                   5, (255, 0, 255), -1)
+        cv2.imshow("scanner", bilateral_filt)
+        while cv2.waitKey(10) & 0xFF != ord('n'):
+            pass
 
         # Determine resistor wattage by pixel length
         resistor_length = right_most[0] - left_most[0]
