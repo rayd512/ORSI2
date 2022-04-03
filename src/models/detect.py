@@ -199,7 +199,7 @@ class Detect:
             return 0
 
         # Debug output
-        # print(right_most[0]-left_most[0])
+        print(right_most[0]-left_most[0])
         cv2.circle(bilateral_filt, left_most,
                    5, (255, 0, 255), -1)
         cv2.circle(bilateral_filt, right_most,
