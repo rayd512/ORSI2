@@ -157,7 +157,7 @@ class Detect:
         """
 
         # Default detection values
-        WATTAGES = {45: 0.125, 75: 0.25, 100: 0.5}
+        WATTAGES = {45: "1/8", 75: "1/4", 100: "1/2"}
         lower_hsv = (0, 100, 0)
         upper_hsv = (179, 255, 255)
 
@@ -247,7 +247,7 @@ class Detect:
                 cv2.putText(
                     frame,
                     str(resistor_val) +
-                    " OHMS, " + str(wattage) + " W",
+                    " OHMS, " + wattage + " W",
                     (x +
                      w +
                      10,
@@ -270,7 +270,7 @@ class Detect:
                 cv2.putText(
                     frame,
                     str(fallback_value) +
-                    " OHMS, " + str(wattage) + " W",
+                    " OHMS, " + wattage + " W",
                     (x +
                      w +
                      10,
