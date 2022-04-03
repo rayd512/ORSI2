@@ -52,6 +52,10 @@ def main():
     while True:
         ret, frame = cap.read()
 
+        if time.time() - start > 1:
+            detect.detect(frame)
+            start = time.time()
+
         detect.show_values(frame)
 
         # Draw start / end button
@@ -60,10 +64,6 @@ def main():
         else:
             Button.end(frame)
             Button.scan(frame)
-
-        if time.time() - start > 1:
-            detect.detect(frame)
-            start = time.time()
 
         cv.imshow("scanner", frame)
 
