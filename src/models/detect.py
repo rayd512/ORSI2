@@ -63,12 +63,12 @@ class Detect:
         self.resistors = []
         resistors = self.cascade.detectMultiScale(frame_gray, 1.1, 25)
         for i, (x, y, w, h) in enumerate(resistors):
-            frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            # frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
             self.resistors.append(
                 {"resistor": resistors[i], "ROI": frame[y:y + h, x:x + w].copy()})
-        cv2.imshow("scanner", frame)
-        while cv2.waitKey(10) & 0xFF != ord('n'):
-            pass
+        # cv2.imshow("scanner", frame)
+        # while cv2.waitKey(10) & 0xFF != ord('n'):
+        #     pass
 
     def draw_ROI(self, frame: List[int]) -> List[int]:
         """
@@ -215,6 +215,8 @@ class Detect:
 
         # Loop through detected resistors
         for i in range(len(self.resistors)):
+            frame = cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+            continue
             bands = self._find_bands(self.resistors[i]["ROI"])
             self.resistors[i]["wattage"] = wattage
             x, y, w, h = self.resistors[i]["resistor"]

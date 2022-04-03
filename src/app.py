@@ -55,7 +55,7 @@ def main():
             detect.detect(frame)
             start = time.time()
 
-        # detect.show_values(frame)
+        detect.show_values(frame)
 
         # Draw start / end button
         if not has_session:
