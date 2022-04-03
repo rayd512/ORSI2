@@ -38,10 +38,8 @@ detect = Detect()
 
 
 def main():
-    # Stolen from https://www.geeksforgeeks.org/python-opencv-capture-video-from-camera/
-    # define a video capture object
-    # Initialize the camera and grab a reference to the raw camera capture
     global detect
+    # Initialize the camera and grab a reference to the raw camera capture
     cap = cv.VideoCapture(0)
 
     # Change to fullscreen
