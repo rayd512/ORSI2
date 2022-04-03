@@ -248,7 +248,7 @@ class Detect:
                 cv2.putText(
                     frame,
                     str(resistor_val) +
-                    " OHMS," + str(wattage) + "W",
+                    " OHMS," + str(wattage) + " W",
                     (x +
                      w +
                      10,
@@ -271,7 +271,7 @@ class Detect:
                 cv2.putText(
                     frame,
                     str(fallback_value) +
-                    " OHMS," + str(wattage) + "W",
+                    " OHMS," + str(wattage) + " W",
                     (x +
                      w +
                      10,
