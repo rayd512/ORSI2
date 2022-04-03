@@ -246,8 +246,7 @@ class Detect:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(
                     frame,
-                    str(resistor_val) +
-                    " OHMS, " + wattage + " W",
+                    f'{resistor_val} OHMS, {wattage} W',
                     (x +
                      w +
                      10,
@@ -269,8 +268,7 @@ class Detect:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 cv2.putText(
                     frame,
-                    str(fallback_value) +
-                    " OHMS, " + wattage + " W",
+                    f'{resistor_val} OHMS, {wattage} W',
                     (x +
                      w +
                      10,
