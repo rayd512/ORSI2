@@ -157,7 +157,7 @@ class Detect:
         """
 
         # Default detection values
-        WATTAGES = {325: 0.125}
+        WATTAGES = {45: 0.125, 75: 0.25, 100: 0.5}
         lower_hsv = (0, 100, 0)
         upper_hsv = (179, 255, 255)
 
@@ -199,14 +199,14 @@ class Detect:
             return 0
 
         # Debug output
-        print(right_most[0]-left_most[0])
-        cv2.circle(bilateral_filt, left_most,
-                   5, (255, 0, 255), -1)
-        cv2.circle(bilateral_filt, right_most,
-                   5, (255, 0, 255), -1)
-        cv2.imshow("scanner", bilateral_filt)
-        while cv2.waitKey(10) & 0xFF != ord('n'):
-            pass
+        # print(right_most[0]-left_most[0])
+        # cv2.circle(bilateral_filt, left_most,
+        #            5, (255, 0, 255), -1)
+        # cv2.circle(bilateral_filt, right_most,
+        #            5, (255, 0, 255), -1)
+        # cv2.imshow("scanner", bilateral_filt)
+        # while cv2.waitKey(10) & 0xFF != ord('n'):
+        #     pass
 
         # Determine resistor wattage by pixel length
         resistor_length = right_most[0] - left_most[0]
@@ -225,13 +225,13 @@ class Detect:
         # detected resistors if not able to calculate
         fallback_value = None
 
-        self._get_wattage(frame)
+        wattage = self._get_wattage(frame)
 
         # Loop through detected resistors
         for i in range(len(self.resistors)):
             bands = self._find_bands(self.resistors[i]["ROI"])
             # wattage = self._get_wattage(self.resistors[i]["ROI"])
-            # self.resistors[i]["wattage"] = wattage
+            self.resistors[i]["wattage"] = wattage
             x, y, w, h = self.resistors[i]["resistor"]
             resistor_val = ""
 
@@ -248,7 +248,7 @@ class Detect:
                 cv2.putText(
                     frame,
                     str(resistor_val) +
-                    " OHMS",
+                    " OHMS," + str(wattage) + "W",
                     (x +
                      w +
                      10,
@@ -271,7 +271,7 @@ class Detect:
                 cv2.putText(
                     frame,
                     str(fallback_value) +
-                    " OHMS",
+                    " OHMS," + str(wattage) + "W",
                     (x +
                      w +
                      10,
