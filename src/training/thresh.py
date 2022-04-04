@@ -11,7 +11,8 @@ def nothing(x):
 image = cv2.imread('src/training/492_positives/1.png')
 
 # Create a window
-cv2.namedWindow('image')
+cv2.namedWindow('image', cv.WND_PROP_FULLSCREEN)
+cv2.setWindowProperty("image", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
 
 # Create trackbars for color change
 # Hue is from 0-179 for Opencv
