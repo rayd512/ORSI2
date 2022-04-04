@@ -250,7 +250,7 @@ class Detect:
                 continue
 
             if len(bands) == 0:
-                continue
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
             # Display value of other resistors if not able to calculate self
             if fallback_value:
@@ -270,7 +270,7 @@ class Detect:
                     2,
                     cv2.LINE_AA)
             else:
-                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
         # Show frame with detected calculations
         cv2.imshow("scanner", frame)
