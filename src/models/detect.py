@@ -100,8 +100,7 @@ class Detect:
             # print(band.color)
             # while cv2.waitKey(10) & 0xFF != ord('n'):
             #     pass
-            
-            
+
             contours, hierarchy = cv2.findContours(
                 mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             contours = list(contours)
