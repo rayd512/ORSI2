@@ -10,16 +10,16 @@ class Detect:
         # Default values for resistor band color ranges, multipliers and draw
         # color
         BAND_DEFAULTS = [
-            [(0, 0, 0), (179, 255, 2), "BLACK", 0, (0, 0, 0)],
-            [(0, 104, 0), (5, 255, 46), "BROWN", 1, (0, 51, 102)],
-            [(0, 220, 30), (2, 255, 100), "RED", 2, (0, 0, 255)],
-            [(5, 165, 75), (15, 255, 180), "ORANGE", 3, (0, 128, 255)],
-            [(22, 200, 15), (30, 255, 185), "YELLOW", 4, (0, 255, 255)],
-            [(35, 130, 0), (70, 255, 255), "GREEN", 5, (0, 255, 0)],
-            [(100, 150, 0), (120, 255, 35), "BLUE", 6, (255, 0, 0)],
-            [(122, 100, 20), (179, 255, 255), "PURPLE", 7, (255, 0, 127)],
-            [(0, 20, 0), (179, 180, 60), "GRAY", 8, (128, 128, 128)],
-            [(0, 0, 90), (179, 15, 250), "WHITE", 9, (255, 255, 255)],
+            [(0, 0, 0), (179, 255, 12), "BLACK", 0, (0, 0, 0)],
+            [(0, 0, 10), (179, 255, 30), "BROWN", 1, (0, 51, 102)],
+            [(0, 140, 45), (179, 255, 100), "RED", 2, (0, 0, 255)],
+            # [(5, 165, 75), (15, 255, 180), "ORANGE", 3, (0, 128, 255)],
+            [(0, 160, 100), (179, 255, 255), "YELLOW", 4, (0, 255, 255)],
+            # [(35, 130, 0), (70, 255, 255), "GREEN", 5, (0, 255, 0)],
+            [(100, 40, 18), (125, 255, 255), "BLUE", 6, (255, 0, 0)],
+            # [(122, 100, 20), (169, 255, 255), "PURPLE", 7, (255, 0, 127)],
+            # [(0, 20, 0), (179, 180, 60), "GRAY", 8, (128, 128, 128)],
+            # [(0, 0, 90), (179, 15, 250), "WHITE", 9, (255, 255, 255)],
         ]
 
         def __init__(
@@ -135,8 +135,8 @@ class Detect:
                     contours.pop(i)
 
             # Used to show detected contours when debugging
-            # cv2.drawContours(bilateral_filt, contours, -
-            #                  1, (band.draw_color), 3)
+        #     cv2.drawContours(bilateral_filt, contours, -
+        #                      1, (band.draw_color), 3)
         # cv2.imshow("scanner", bilateral_filt)
         # while cv2.waitKey(10) & 0xFF != ord('n'):
         #     pass
@@ -165,7 +165,7 @@ class Detect:
 
         # Default detection values
         WATTAGES = {45: "1/8", 75: "1/4", 100: "1/2"}
-        lower_hsv = (0, 100, 0)
+        lower_hsv = (0, 50, 0)
         upper_hsv = (179, 255, 255)
 
         # Mask off to isolate the resistor body

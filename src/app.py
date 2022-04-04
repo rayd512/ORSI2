@@ -51,10 +51,10 @@ def main():
         ret, frame = cap.read()
 
         if time.time() - start > 1:
-            # detect.detect(frame)
+            detect.detect(frame)
             start = time.time()
 
-        # detect.show_values(frame)
+        detect.show_values(frame)
 
         # Draw start / end button
         if not has_session:
