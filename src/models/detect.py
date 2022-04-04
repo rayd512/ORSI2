@@ -97,6 +97,11 @@ class Detect:
         for band in self.BANDS:
             mask = cv2.inRange(hsv, band.lower_hsv, band.upper_hsv)
             cv2.imshow("scanner", mask)
+            print(band.color)
+            while cv2.waitKey(10) & 0xFF != ord('n'):
+                pass
+            
+            
             contours, hierarchy = cv2.findContours(
                 mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
             contours = list(contours)
