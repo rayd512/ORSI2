@@ -41,6 +41,7 @@ detect = Detect()
 prev_frame_time = 0
 new_frame_time = 0
 
+
 def main():
     global detect
     global prev_frame_time, new_frame_time
@@ -56,7 +57,7 @@ def main():
         ret, frame = cap.read()
 
         new_frame_time = time.time()
-        fps = 1/(new_frame_time-prev_frame_time)
+        fps = 1 / (new_frame_time - prev_frame_time)
         prev_frame_time = new_frame_time
         print(fps)
 

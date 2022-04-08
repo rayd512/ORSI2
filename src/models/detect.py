@@ -3,7 +3,8 @@ import cv2
 
 
 # Used to detect resistors and determine it's wattage and values
-# Detection was created and based off of https://github.com/dishonesthips/OhmVision
+# Detection was created and based off of
+# https://github.com/dishonesthips/OhmVision
 class Detect:
     # Inner class used to store data on bands that could exist on resistor
     class Band:
