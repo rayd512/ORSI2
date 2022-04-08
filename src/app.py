@@ -43,6 +43,7 @@ new_frame_time = 0
 
 def main():
     global detect
+    global prev_frame_time, new_frame_time
     # Initialize the camera and grab a reference to the raw camera capture
     cap = cv.VideoCapture(0)
 
