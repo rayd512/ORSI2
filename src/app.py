@@ -37,6 +37,10 @@ db = Database()
 detect = Detect()
 
 
+# Frame rate counter
+prev_frame_time = 0
+new_frame_time = 0
+
 def main():
     global detect
     # Initialize the camera and grab a reference to the raw camera capture
@@ -49,6 +53,11 @@ def main():
     start = time.time()
     while True:
         ret, frame = cap.read()
+
+        new_frame_time = time.time()
+        fps = 1/(new_frame_time-prev_frame_time)
+        prev_frame_time = new_frame_time
+        print(fps)
 
         if time.time() - start > 1:
             detect.detect(frame)
